@@ -1,5 +1,5 @@
-import {useState,useEffect} from "react";
-import {DragDropContext,Droppable,Draggable} from "react-beautiful-dnd"
+import { useState, useEffect } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import React from "react";
 import "./App.css";
 
@@ -36,40 +36,26 @@ const DATA = [
   },
 ];
 
-
 function App() {
+  const [stores, setStores] = useState(DATA);
 
-  const [stores,setStores]=useState(DATA);
-  const AnimatedDroppable = ({ children, ...props }) => {
-    const [enabled, setEnabled] = useState(false);
-    useEffect(() => {
-      const animation = requestAnimationFrame(() => setEnabled(true));
-      return () => {
-        cancelAnimationFrame(animation);
-        setEnabled(false);
-      };
-    }, []);
-  
-    if (!enabled) {
-      return null;
-    }
-  
-    return <Droppable {...props}>{children}</Droppable>;
-  };
-
-  const handleDragDrop=(results)=>{
-    const {source,destination,type}=results;
-    if(!destination) return;
-    if(source.droppableId===destination.droppableId && source.index===destination.index) return;
-    if(type==="group"){
-      const reorderedStores=[...stores];
-      const sourceIndex=source.index;
-      const destinationIndex=destination.index;
-      const [removedStore]=reorderedStores.splice(sourceIndex,1);
-      reorderedStores.splice(destinationIndex,0,removedStore);
+  const handleDragDrop = (results) => {
+    const { source, destination, type } = results;
+    if (!destination) return;
+    if (
+      source.droppableId === destination.droppableId &&
+      source.index === destination.index
+    )
+      return;
+    if (type === "group") {
+      const reorderedStores = [...stores];
+      const sourceIndex = source.index;
+      const destinationIndex = destination.index;
+      const [removedStore] = reorderedStores.splice(sourceIndex, 1);
+      reorderedStores.splice(destinationIndex, 0, removedStore);
       return setStores(reorderedStores);
     }
-  }
+  };
   return (
     <div className="layout__wrapper">
       <div className="card">
@@ -77,24 +63,31 @@ function App() {
           <div className="header">
             <h1>Shopping List</h1>
           </div>
-          <AnimatedDroppable droppableId="ROOT" type="group">
-            {(provided)=>(
+          <Droppable droppableId="ROOT" type="group">
+            {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
-                {stores.map((store,index) => (
-                  <Draggable draggableId={store.id} key={store.id} index={index}>
-                      {(provided)=>(
-                   
-                          <div className="store-container" {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}>
-                            <h3>{store.name}</h3>
-                          </div>
-                       
-                      )}
+                {stores.map((store, index) => (
+                  <Draggable
+                    draggableId={store.id}
+                    key={store.id}
+                    index={index}
+                  >
+                    {(provided) => (
+                      <div
+                        className="store-container"
+                        {...provided.dragHandleProps}
+                        {...provided.draggableProps}
+                        ref={provided.innerRef}
+                      >
+                        <h3>{store.name}</h3>
+                      </div>
+                    )}
                   </Draggable>
                 ))}
                 {provided.placeholder}
               </div>
             )}
-          </AnimatedDroppable>
+          </Droppable>
         </DragDropContext>
       </div>
     </div>
@@ -102,7 +95,6 @@ function App() {
 }
 
 export default App;
-
 
 // import React, { useState } from "react";
 // import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
