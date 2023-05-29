@@ -2,14 +2,17 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 
-const itemsFrombackend = [
-  { id: uuid(), content: "first task" },
-  { id: uuid(), content: "second task" },
+const requestedItemsFromBackend = [
+  { id: uuid(), content: "Make a web page in react js" },
+  { id: uuid(), content: "design it using figma" },
+  { id: uuid(), content: "make it responsive" },
+  { id: uuid(), content: "test it in all resolutions" },
 ];
+
 const columnsFromBackend = {
   [uuid()]: {
     name: "Requested",
-    items: itemsFrombackend,
+    items: requestedItemsFromBackend,
   },
   [uuid()]: {
     name: "To Do",

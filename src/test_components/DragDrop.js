@@ -1,17 +1,12 @@
 //Dragula--->
-import React, { useEffect, useRef } from 'react';
-import Dragula from 'react-dragula';
-import 'dragula/dist/dragula.min.css';
-
+import React, { useEffect, useRef } from "react";
+import Dragula from "react-dragula";
+import "dragula/dist/dragula.min.css";
 const DragDrop = () => {
   const containers = useRef([]);
-
   useEffect(() => {
-    containers.current = [
-      document.querySelector('#container1'),
-     
-    ];
-    
+    containers.current = [document.querySelector("#container1")];
+
     Dragula(containers.current);
   }, []);
 
@@ -34,4 +29,3 @@ const DragDrop = () => {
 };
 
 export default DragDrop;
-
