@@ -6,9 +6,8 @@ import LazyLoadLab from "./test_components/LazyLoadLab";
 import TrelloTest from "./test_components/TrelloTest";
 import KanbanBoard from "./test_components/KanbanBoard";
 
-
 function App() {
-  return(
+  return (
     <div className="App">
       {/* <DragDrop /> */}
       {/* <ReactBeautifulDND /> */}
@@ -16,7 +15,7 @@ function App() {
       {/* <TrelloTest /> */}
       <KanbanBoard />
     </div>
-  )
+  );
 }
 
 export default App;
