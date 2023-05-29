@@ -115,3 +115,11 @@ const TrelloTest = () => {
 };
 
 export default TrelloTest;
+
+// so today i was working on seperating new lines in the activity log just like sakib described previously 
+// in the meeting, so i completed this fuctionality and gave it to Sakib for testing, and then i had meeting with deepak
+// in the evening . he was having problems pushing his code in the aws repository so i helped him out, and now his codes and his branche
+// has been pushed correctly in the aws pointers-web-api repository and also
+// aunn sir messaged me in slack. he told me to research about trello-UI & drag and drop lane for now, and he said he will meet with 
+// me on monday and discuss more details about upcoming task. so currently i am researching about trello - ui and tommorow i will 
+// try to implement it in coding.
