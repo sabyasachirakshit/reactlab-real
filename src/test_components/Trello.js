@@ -3,10 +3,16 @@ import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 
 const requestedItemsFromBackend = [
-  { id: uuid(), content: "Make a web page in react js" },
-  { id: uuid(), content: "design it using figma" },
-  { id: uuid(), content: "make it responsive" },
-  { id: uuid(), content: "test it in all resolutions" },
+  { id: uuid(), content: "Make Trello board UI" },
+  { id: uuid(), content: "Use React-Beautiful-DND package" },
+  { id: uuid(), content: "Make Multiple Lanes" },
+  { id: uuid(), content: "Write logic for Draggable" },
+  { id: uuid(), content: "Write logic for DragDrop Context" },
+  { id: uuid(), content: "Write logic for Draggable" },
+  { id: uuid(), content: "Write logic for Droppable" },
+  { id: uuid(), content: "Write logic for multiple lanes drag & drop" },
+  { id: uuid(), content: "change height of each lanes dynamically" },
+  { id: uuid(), content: "Test if it's working properly" },
 ];
 
 const columnsFromBackend = {
@@ -63,11 +69,17 @@ const onDragEnd = (result, columns, setColumns) => {
     });
   }
 };
-function KanbanBoard() {
+function Trello() {
   const [columns, setColumns] = useState(columnsFromBackend);
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        height: "100%",
+      }}
+    >
       <DragDropContext
         onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
       >
@@ -94,7 +106,7 @@ function KanbanBoard() {
                             : "lightgrey",
                           padding: 4,
                           width: 250,
-                          minHeight: 500,
+                          minHeight: "fit-content",
                         }}
                       >
                         {column.items.map((item, index) => {
@@ -143,4 +155,4 @@ function KanbanBoard() {
   );
 }
 
-export default KanbanBoard;
+export default Trello;

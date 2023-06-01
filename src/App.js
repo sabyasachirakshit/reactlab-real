@@ -4,7 +4,7 @@ import ReactBeautifulDND from "./test_components/ReactBeautifulDND";
 import DragDrop from "./test_components/DragDrop";
 import LazyLoadLab from "./test_components/LazyLoadLab";
 import TrelloTest from "./test_components/TrelloTest";
-import KanbanBoard from "./test_components/KanbanBoard";
+import Trello from "./test_components/Trello";
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
       {/* <ReactBeautifulDND /> */}
       {/* <LazyLoadLab /> */}
       {/* <TrelloTest /> */}
-      <KanbanBoard />
+      <Trello />
     </div>
   );
 }
