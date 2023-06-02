@@ -19,22 +19,18 @@ const columnsFromBackend = {
   [uuid()]: {
     name: "Requested",
     items: requestedItemsFromBackend,
-    inputValue: "",
   },
   [uuid()]: {
     name: "To Do",
     items: [],
-    inputValue: "",
   },
   [uuid()]: {
     name: "In Progress",
     items: [],
-    inputValue: "",
   },
   [uuid()]: {
     name: "Completed",
     items: [],
-    inputValue: "",
   },
 };
 
@@ -75,22 +71,6 @@ const onDragEnd = (result, columns, setColumns) => {
 };
 function Trello() {
   const [columns, setColumns] = useState(columnsFromBackend);
-  const handleInputChange = (columnId, value) => {
-    setColumns((prevColumns) => ({
-      ...prevColumns,
-      [columnId]: {
-        ...prevColumns[columnId],
-        inputValue: value,
-      },
-    }));
-  };
-
-  const handleAddCard = (columnId) => {
-    const column = columns[columnId];
-    console.log("Card Content:", column.inputValue);
-    console.log("Column ID:", columnId);
-    handleInputChange(columnId, "");
-  };
 
   return (
     <div
@@ -113,15 +93,6 @@ function Trello() {
               }}
             >
               <h2>{column.name}</h2>
-              <div style={{ margin: 8 }}>
-                <input
-                  type="text"
-                  value={column.inputValue}
-                  onChange={(e) => handleInputChange(id, e.target.value)}
-                  placeholder="Enter card content"
-                />
-                <button onClick={() => handleAddCard(id)}>Add Card</button>
-              </div>
               <div style={{ margin: 8 }}>
                 <Droppable droppableId={id} key={id}>
                   {(provided, snapshot) => {
