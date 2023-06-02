@@ -87,9 +87,23 @@ function Trello() {
 
   const handleAddCard = (columnId) => {
     const column = columns[columnId];
+    const newCard = {
+      id: uuid(),
+      content: column.inputValue,
+    };
+    const updatedItems = [...column.items, newCard];
+
+    setColumns((prevColumns) => ({
+      ...prevColumns,
+      [columnId]: {
+        ...prevColumns[columnId],
+        items: updatedItems,
+        inputValue: "",
+      },
+    }));
+
     console.log("Card Content:", column.inputValue);
     console.log("Column ID:", columnId);
-    handleInputChange(columnId, "");
   };
 
   return (
