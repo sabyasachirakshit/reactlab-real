@@ -101,9 +101,6 @@ function Trello() {
         inputValue: "",
       },
     }));
-
-    console.log("Card Content:", column.inputValue);
-    console.log("Column ID:", columnId);
   };
 
   const handleCreateLane = () => {
