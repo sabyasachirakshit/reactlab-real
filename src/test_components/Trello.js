@@ -4,39 +4,92 @@ import { v4 as uuid } from "uuid";
 import { Modal, Input } from "antd";
 
 const requestedItemsFromBackend = [
-  { id: uuid(), content: "Make Trello board UI", tags: ["React JS", "Trello"] },
+  {
+    id: uuid(),
+    content: "Make Trello board UI",
+    tags: ["React JS", "Pointers"],
+  },
   {
     id: uuid(),
     content: "Use React-Beautiful-DND package",
-    tags: ["React JS", "Trello"],
+    tags: ["React JS", "Pointers"],
   },
-  { id: uuid(), content: "Make Multiple Lanes", tags: ["React JS", "Trello"] },
+  {
+    id: uuid(),
+    content: "Make Multiple Lanes",
+    tags: ["React JS", "Pointers"],
+  },
   {
     id: uuid(),
     content: "Write logic for Draggable",
-    tags: ["React JS", "Trello"],
+    tags: ["React JS", "Pointers"],
+  },
+];
+const colorArray = [
+  "#FFCDD2",
+  "#BBDEFB",
+  "#C8E6C9",
+  "#E1BEE7",
+  "#FF00FF",
+  "#00FFFF",
+];
+
+const requestedItemsFromBackend2 = [
+  { id: uuid(), content: "Clean House", tags: ["Cleaning", "Hobby"] },
+  {
+    id: uuid(),
+    content: "Buy Groceries",
+    tags: ["Shopping"],
+  },
+  { id: uuid(), content: "Cook Food", tags: ["Hobby", "Cooking"] },
+];
+
+const requestedItemsFromBackend3 = [
+  { id: uuid(), content: "Go for Morning Walk", tags: ["Health", "Workout"] },
+  {
+    id: uuid(),
+    content: "Organize Accessories",
+    tags: ["Personal", "Home", "Cleanliness"],
+  },
+  {
+    id: uuid(),
+    content: "Read Books",
+    tags: ["Hobby", "Reading", "Entertainment"],
+  },
+];
+
+const requestedItemsFromBackend4 = [
+  {
+    id: uuid(),
+    content: "Watch Football Match",
+    tags: ["Game", "Entertainment"],
+  },
+  {
+    id: uuid(),
+    content: "Hang out with Friends",
+    tags: ["Entertainment"],
   },
 ];
 
 const columnsFromBackend = {
   [uuid()]: {
-    name: "Requested",
+    name: "Work",
     items: requestedItemsFromBackend,
     inputValue: "",
   },
   [uuid()]: {
-    name: "To Do",
-    items: [],
+    name: "Home",
+    items: requestedItemsFromBackend2,
     inputValue: "",
   },
   [uuid()]: {
-    name: "In Progress",
-    items: [],
+    name: "Personal",
+    items: requestedItemsFromBackend3,
     inputValue: "",
   },
   [uuid()]: {
-    name: "Completed",
-    items: [],
+    name: "Miscellaneous",
+    items: requestedItemsFromBackend4,
     inputValue: "",
   },
 };
@@ -244,7 +297,8 @@ function Trello() {
                     type="text"
                     value={column.inputValue}
                     onChange={(e) => handleInputChange(id, e.target.value)}
-                    placeholder="Enter card content"
+                    placeholder="Enter Card Title"
+                    style={{ position: "relative", left: 5, width: "66%" }}
                   />
                   <button onClick={() => handleAddCard(id)}>Add Card</button>
                 </div>
@@ -283,9 +337,9 @@ function Trello() {
                                         margin: "0 0 8px 0",
                                         minHeight: "50px",
                                         backgroundColor: snapshot.isDragging
-                                          ? "#263b4a"
-                                          : "#456c86",
-                                        color: "white",
+                                          ? "grey"
+                                          : "white",
+                                        color: "black",
                                         ...provided.draggableProps.style,
                                       }}
                                       onClick={() => handleCardClick(item.id)}
@@ -299,11 +353,14 @@ function Trello() {
                                         }}
                                       >
                                         {item.tags &&
-                                          item.tags.map((tag) => (
+                                          item.tags.map((tag, tagIndex) => (
                                             <div
                                               key={tag}
                                               style={{
-                                                backgroundColor: "aqua",
+                                                backgroundColor:
+                                                  colorArray[
+                                                    tagIndex % colorArray.length
+                                                  ],
                                                 color: "black",
                                                 padding: 10,
                                                 cursor: "pointer",
@@ -320,7 +377,7 @@ function Trello() {
                                           ))}
                                       </div>
                                       <span style={{ cursor: "pointer" }}>
-                                        {item.content}
+                                        <b>{item.content}</b>
                                       </span>
                                     </div>
                                   );
