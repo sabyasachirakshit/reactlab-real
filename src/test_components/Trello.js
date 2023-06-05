@@ -4,17 +4,17 @@ import { v4 as uuid } from "uuid";
 import { Modal, Input } from "antd";
 
 const requestedItemsFromBackend = [
-  { id: uuid(), content: "Make Trello board UI", tags: ["UI", "Frontend"] },
+  { id: uuid(), content: "Make Trello board UI", tags: ["React JS", "Trello"] },
   {
     id: uuid(),
     content: "Use React-Beautiful-DND package",
-    tags: ["UI", "Frontend"],
+    tags: ["React JS", "Trello"],
   },
-  { id: uuid(), content: "Make Multiple Lanes", tags: ["UI", "Frontend"] },
+  { id: uuid(), content: "Make Multiple Lanes", tags: ["React JS", "Trello"] },
   {
     id: uuid(),
     content: "Write logic for Draggable",
-    tags: ["UI", "Frontend"],
+    tags: ["React JS", "Trello"],
   },
 ];
 
@@ -289,14 +289,38 @@ function Trello() {
                                       }}
                                       onClick={() => handleCardClick(item.id)}
                                     >
-                                      {item.content}
-                                      <div style={{ marginTop: 8 }}>
-                                        Tags:{" "}
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          gap: 4,
+                                          flexWrap: "wrap",
+                                          marginBottom: 16,
+                                        }}
+                                      >
                                         {item.tags &&
                                           item.tags.map((tag) => (
-                                            <span key={tag}>{tag}</span>
+                                            <div
+                                              key={tag}
+                                              style={{
+                                                backgroundColor: "aqua",
+                                                color: "black",
+                                                padding: 10,
+                                                cursor: "pointer",
+                                                width:
+                                                  tag.length < 5
+                                                    ? "15%"
+                                                    : "fit-content",
+                                                textAlign: "center",
+                                                borderRadius: 20,
+                                              }}
+                                            >
+                                              {tag}
+                                            </div>
                                           ))}
                                       </div>
+                                      <span style={{ cursor: "pointer" }}>
+                                        {item.content}
+                                      </span>
                                     </div>
                                   );
                                 }}
