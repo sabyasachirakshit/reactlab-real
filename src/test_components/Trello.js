@@ -4,16 +4,18 @@ import { v4 as uuid } from "uuid";
 import { Modal, Input } from "antd";
 
 const requestedItemsFromBackend = [
-  { id: uuid(), content: "Make Trello board UI" },
-  { id: uuid(), content: "Use React-Beautiful-DND package" },
-  { id: uuid(), content: "Make Multiple Lanes" },
-  { id: uuid(), content: "Write logic for Draggable" },
-  { id: uuid(), content: "Write logic for DragDrop Context" },
-  { id: uuid(), content: "Write logic for Draggable" },
-  { id: uuid(), content: "Write logic for Droppable" },
-  { id: uuid(), content: "Write logic for multiple lanes drag & drop" },
-  { id: uuid(), content: "change height of each lanes dynamically" },
-  { id: uuid(), content: "Test if it's working properly" },
+  { id: uuid(), content: "Make Trello board UI", tags: ["UI", "Frontend"] },
+  {
+    id: uuid(),
+    content: "Use React-Beautiful-DND package",
+    tags: ["UI", "Frontend"],
+  },
+  { id: uuid(), content: "Make Multiple Lanes", tags: ["UI", "Frontend"] },
+  {
+    id: uuid(),
+    content: "Write logic for Draggable",
+    tags: ["UI", "Frontend"],
+  },
 ];
 
 const columnsFromBackend = {
@@ -75,18 +77,24 @@ const onDragEnd = (result, columns, setColumns) => {
   }
 };
 
-function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
+function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
   const [updatedTitle, setUpdatedTitle] = useState("");
+  const [updatedTags, setUpdatedTags] = useState([]);
 
   const handleUpdateTitle = () => {
     onUpdateTitle(cardId, updatedTitle);
     onClose();
   };
 
+  const handleUpdateTags = () => {
+    onUpdateTags(cardId, updatedTags);
+    onClose();
+  };
+
   return (
     <Modal
-      title="Update Card Title"
-      visible={true} // You can control the visibility of the modal with a state if needed
+      title="Update Card Details"
+      visible={true}
       onCancel={onClose}
       onOk={handleUpdateTitle}
     >
@@ -95,6 +103,14 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
         onChange={(e) => setUpdatedTitle(e.target.value)}
         placeholder="Enter new title"
       />
+      <Input
+        value={updatedTags.join(", ")}
+        onChange={(e) =>
+          setUpdatedTags(e.target.value.split(",").map((tag) => tag.trim()))
+        }
+        placeholder="Enter tags separated by commas"
+      />
+      <button onClick={handleUpdateTags}>Update Tags</button>
     </Modal>
   );
 }
@@ -109,10 +125,24 @@ function Trello() {
     setIsModalOpen(true);
   };
 
+  const handleUpdateTags = (cardId, updatedTags) => {
+    const updatedColumns = { ...columns };
+
+    for (const columnId in updatedColumns) {
+      const column = updatedColumns[columnId];
+      const cardIndex = column.items.findIndex((card) => card.id === cardId);
+      if (cardIndex !== -1) {
+        column.items[cardIndex].tags = updatedTags;
+        break;
+      }
+    }
+
+    setColumns(updatedColumns);
+  };
+
   const handleUpdateTitle = (cardId, updatedTitle) => {
     const updatedColumns = { ...columns };
 
-    // Find the card by cardId and update its title
     for (const columnId in updatedColumns) {
       const column = updatedColumns[columnId];
       const cardIndex = column.items.findIndex((card) => card.id === cardId);
@@ -257,6 +287,13 @@ function Trello() {
                                       onClick={() => handleCardClick(item.id)}
                                     >
                                       {item.content}
+                                      <div style={{ marginTop: 8 }}>
+                                        Tags:{" "}
+                                        {item.tags &&
+                                          item.tags.map((tag) => (
+                                            <span key={tag}>{tag}</span>
+                                          ))}
+                                      </div>
                                     </div>
                                   );
                                 }}
@@ -279,6 +316,7 @@ function Trello() {
           cardId={selectedCardId}
           onClose={() => setIsModalOpen(false)}
           onUpdateTitle={handleUpdateTitle}
+          onUpdateTags={handleUpdateTags}
         />
       )}
     </div>
