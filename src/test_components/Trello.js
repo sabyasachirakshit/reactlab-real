@@ -337,7 +337,7 @@ function Trello() {
                                         margin: "0 0 8px 0",
                                         minHeight: "50px",
                                         backgroundColor: snapshot.isDragging
-                                          ? "grey"
+                                          ? "lightgrey"
                                           : "white",
                                         color: "black",
                                         ...provided.draggableProps.style,
