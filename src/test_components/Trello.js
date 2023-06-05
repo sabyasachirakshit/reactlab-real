@@ -96,14 +96,6 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
     setUpdatedTags(tags);
   };
 
-  const handleTagsInputKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleUpdateTags();
-    } else if (e.key === "Backspace" && e.target.value === "") {
-      setUpdatedTags((prevTags) => prevTags.slice(0, -1));
-    }
-  };
-
   return (
     <Modal
       title="Update Card Details"
@@ -119,7 +111,6 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
       <Input
         value={updatedTags}
         onChange={handleTagsInputChange}
-        onKeyDown={handleTagsInputKeyDown}
         placeholder="Enter tags separated by commas"
       />
       <button onClick={handleUpdateTags}>Update Tags</button>
