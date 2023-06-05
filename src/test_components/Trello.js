@@ -105,11 +105,13 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
     >
       <Input
         value={updatedTitle}
+        style={{ marginBottom: 10 }}
         onChange={(e) => setUpdatedTitle(e.target.value)}
         placeholder="Enter new title"
       />
       <Input
         value={updatedTags}
+        style={{ marginBottom: 10 }}
         onChange={handleTagsInputChange}
         placeholder="Enter tags separated by commas"
       />
