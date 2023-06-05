@@ -1,6 +1,7 @@
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
+import { Modal, Input } from "antd";
 
 const requestedItemsFromBackend = [
   { id: uuid(), content: "Make Trello board UI" },
@@ -73,8 +74,57 @@ const onDragEnd = (result, columns, setColumns) => {
     });
   }
 };
+
+function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
+  const [updatedTitle, setUpdatedTitle] = useState("");
+
+  const handleUpdateTitle = () => {
+    onUpdateTitle(cardId, updatedTitle);
+    onClose();
+  };
+
+  return (
+    <Modal
+      title="Update Card Title"
+      visible={true} // You can control the visibility of the modal with a state if needed
+      onCancel={onClose}
+      onOk={handleUpdateTitle}
+    >
+      <Input
+        value={updatedTitle}
+        onChange={(e) => setUpdatedTitle(e.target.value)}
+        placeholder="Enter new title"
+      />
+    </Modal>
+  );
+}
+
 function Trello() {
   const [columns, setColumns] = useState(columnsFromBackend);
+  const [selectedCardId, setSelectedCardId] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleCardClick = (cardId) => {
+    setSelectedCardId(cardId);
+    setIsModalOpen(true);
+  };
+
+  const handleUpdateTitle = (cardId, updatedTitle) => {
+    const updatedColumns = { ...columns };
+
+    // Find the card by cardId and update its title
+    for (const columnId in updatedColumns) {
+      const column = updatedColumns[columnId];
+      const cardIndex = column.items.findIndex((card) => card.id === cardId);
+      if (cardIndex !== -1) {
+        column.items[cardIndex].content = updatedTitle;
+        break;
+      }
+    }
+
+    setColumns(updatedColumns);
+  };
+
   const handleInputChange = (columnId, value) => {
     setColumns((prevColumns) => ({
       ...prevColumns,
@@ -204,6 +254,7 @@ function Trello() {
                                         color: "white",
                                         ...provided.draggableProps.style,
                                       }}
+                                      onClick={() => handleCardClick(item.id)}
                                     >
                                       {item.content}
                                     </div>
@@ -223,6 +274,13 @@ function Trello() {
           })}
         </DragDropContext>
       </div>
+      {isModalOpen && (
+        <CardDetailModal
+          cardId={selectedCardId}
+          onClose={() => setIsModalOpen(false)}
+          onUpdateTitle={handleUpdateTitle}
+        />
+      )}
     </div>
   );
 }
