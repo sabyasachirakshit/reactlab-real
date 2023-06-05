@@ -309,7 +309,7 @@ function Trello() {
                                                 cursor: "pointer",
                                                 width:
                                                   tag.length < 5
-                                                    ? "15%"
+                                                    ? "30%"
                                                     : "fit-content",
                                                 textAlign: "center",
                                                 borderRadius: 20,
