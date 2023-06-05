@@ -87,20 +87,22 @@ function Trello() {
 
   const handleAddCard = (columnId) => {
     const column = columns[columnId];
-    const newCard = {
-      id: uuid(),
-      content: column.inputValue,
-    };
-    const updatedItems = [...column.items, newCard];
+    if (column.inputValue && column.inputValue !== "") {
+      const newCard = {
+        id: uuid(),
+        content: column.inputValue,
+      };
+      const updatedItems = [...column.items, newCard];
 
-    setColumns((prevColumns) => ({
-      ...prevColumns,
-      [columnId]: {
-        ...prevColumns[columnId],
-        items: updatedItems,
-        inputValue: "",
-      },
-    }));
+      setColumns((prevColumns) => ({
+        ...prevColumns,
+        [columnId]: {
+          ...prevColumns[columnId],
+          items: updatedItems,
+          inputValue: "",
+        },
+      }));
+    }
   };
 
   const handleCreateLane = () => {
