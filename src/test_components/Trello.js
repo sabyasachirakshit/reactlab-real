@@ -1,18 +1,21 @@
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
+import { Modal, Input } from "antd";
 
 const requestedItemsFromBackend = [
-  { id: uuid(), content: "Make Trello board UI" },
-  { id: uuid(), content: "Use React-Beautiful-DND package" },
-  { id: uuid(), content: "Make Multiple Lanes" },
-  { id: uuid(), content: "Write logic for Draggable" },
-  { id: uuid(), content: "Write logic for DragDrop Context" },
-  { id: uuid(), content: "Write logic for Draggable" },
-  { id: uuid(), content: "Write logic for Droppable" },
-  { id: uuid(), content: "Write logic for multiple lanes drag & drop" },
-  { id: uuid(), content: "change height of each lanes dynamically" },
-  { id: uuid(), content: "Test if it's working properly" },
+  { id: uuid(), content: "Make Trello board UI", tags: ["React JS", "Trello"] },
+  {
+    id: uuid(),
+    content: "Use React-Beautiful-DND package",
+    tags: ["React JS", "Trello"],
+  },
+  { id: uuid(), content: "Make Multiple Lanes", tags: ["React JS", "Trello"] },
+  {
+    id: uuid(),
+    content: "Write logic for Draggable",
+    tags: ["React JS", "Trello"],
+  },
 ];
 
 const columnsFromBackend = {
@@ -73,8 +76,89 @@ const onDragEnd = (result, columns, setColumns) => {
     });
   }
 };
+
+function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
+  const [updatedTitle, setUpdatedTitle] = useState("");
+  const [updatedTags, setUpdatedTags] = useState([]);
+
+  const handleUpdateCardModalDetails = () => {
+    if (updatedTitle && updatedTitle !== "") {
+      onUpdateTitle(cardId, updatedTitle);
+    }
+    if (updatedTags.length) {
+      onUpdateTags(cardId, updatedTags);
+    }
+    onClose();
+  };
+
+  const handleTagsInputChange = (e) => {
+    const tags = e.target.value.split(",").map((tag) => tag.trim());
+    setUpdatedTags(tags);
+  };
+
+  return (
+    <Modal
+      title="Update Card Details"
+      open={true}
+      onCancel={onClose}
+      onOk={handleUpdateCardModalDetails}
+    >
+      <Input
+        value={updatedTitle}
+        style={{ marginBottom: 10 }}
+        onChange={(e) => setUpdatedTitle(e.target.value)}
+        placeholder="Update Your Card Title"
+      />
+      <Input
+        value={updatedTags}
+        style={{ marginBottom: 10 }}
+        onChange={handleTagsInputChange}
+        placeholder="Update Your Tags Separated By Commas"
+      />
+    </Modal>
+  );
+}
+
 function Trello() {
   const [columns, setColumns] = useState(columnsFromBackend);
+  const [selectedCardId, setSelectedCardId] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleCardClick = (cardId) => {
+    setSelectedCardId(cardId);
+    setIsModalOpen(true);
+  };
+
+  const handleUpdateTags = (cardId, updatedTags) => {
+    const updatedColumns = { ...columns };
+
+    for (const columnId in updatedColumns) {
+      const column = updatedColumns[columnId];
+      const cardIndex = column.items.findIndex((card) => card.id === cardId);
+      if (cardIndex !== -1) {
+        column.items[cardIndex].tags = updatedTags;
+        break;
+      }
+    }
+
+    setColumns(updatedColumns);
+  };
+
+  const handleUpdateTitle = (cardId, updatedTitle) => {
+    const updatedColumns = { ...columns };
+
+    for (const columnId in updatedColumns) {
+      const column = updatedColumns[columnId];
+      const cardIndex = column.items.findIndex((card) => card.id === cardId);
+      if (cardIndex !== -1) {
+        column.items[cardIndex].content = updatedTitle;
+        break;
+      }
+    }
+
+    setColumns(updatedColumns);
+  };
+
   const handleInputChange = (columnId, value) => {
     setColumns((prevColumns) => ({
       ...prevColumns,
@@ -87,20 +171,22 @@ function Trello() {
 
   const handleAddCard = (columnId) => {
     const column = columns[columnId];
-    const newCard = {
-      id: uuid(),
-      content: column.inputValue,
-    };
-    const updatedItems = [...column.items, newCard];
+    if (column.inputValue && column.inputValue !== "") {
+      const newCard = {
+        id: uuid(),
+        content: column.inputValue,
+      };
+      const updatedItems = [...column.items, newCard];
 
-    setColumns((prevColumns) => ({
-      ...prevColumns,
-      [columnId]: {
-        ...prevColumns[columnId],
-        items: updatedItems,
-        inputValue: "",
-      },
-    }));
+      setColumns((prevColumns) => ({
+        ...prevColumns,
+        [columnId]: {
+          ...prevColumns[columnId],
+          items: updatedItems,
+          inputValue: "",
+        },
+      }));
+    }
   };
 
   const handleCreateLane = () => {
@@ -202,8 +288,40 @@ function Trello() {
                                         color: "white",
                                         ...provided.draggableProps.style,
                                       }}
+                                      onClick={() => handleCardClick(item.id)}
                                     >
-                                      {item.content}
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          gap: 4,
+                                          flexWrap: "wrap",
+                                          marginBottom: 16,
+                                        }}
+                                      >
+                                        {item.tags &&
+                                          item.tags.map((tag) => (
+                                            <div
+                                              key={tag}
+                                              style={{
+                                                backgroundColor: "aqua",
+                                                color: "black",
+                                                padding: 10,
+                                                cursor: "pointer",
+                                                width:
+                                                  tag.length < 5
+                                                    ? "30%"
+                                                    : "fit-content",
+                                                textAlign: "center",
+                                                borderRadius: 20,
+                                              }}
+                                            >
+                                              {tag}
+                                            </div>
+                                          ))}
+                                      </div>
+                                      <span style={{ cursor: "pointer" }}>
+                                        {item.content}
+                                      </span>
                                     </div>
                                   );
                                 }}
@@ -221,6 +339,14 @@ function Trello() {
           })}
         </DragDropContext>
       </div>
+      {isModalOpen && (
+        <CardDetailModal
+          cardId={selectedCardId}
+          onClose={() => setIsModalOpen(false)}
+          onUpdateTitle={handleUpdateTitle}
+          onUpdateTags={handleUpdateTags}
+        />
+      )}
     </div>
   );
 }
