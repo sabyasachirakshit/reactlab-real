@@ -81,13 +81,13 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
   const [updatedTitle, setUpdatedTitle] = useState("");
   const [updatedTags, setUpdatedTags] = useState([]);
 
-  const handleUpdateTitle = () => {
-    onUpdateTitle(cardId, updatedTitle);
-    onClose();
-  };
-
-  const handleUpdateTags = () => {
-    onUpdateTags(cardId, updatedTags);
+  const handleUpdateCardModalDetails = () => {
+    if (updatedTitle && updatedTitle !== "") {
+      onUpdateTitle(cardId, updatedTitle);
+    }
+    if (updatedTags.length) {
+      onUpdateTags(cardId, updatedTags);
+    }
     onClose();
   };
 
@@ -99,9 +99,9 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
   return (
     <Modal
       title="Update Card Details"
-      visible={true}
+      open={true}
       onCancel={onClose}
-      onOk={handleUpdateTitle}
+      onOk={handleUpdateCardModalDetails}
     >
       <Input
         value={updatedTitle}
@@ -115,7 +115,6 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
         onChange={handleTagsInputChange}
         placeholder="Enter tags separated by commas"
       />
-      <button onClick={handleUpdateTags}>Update Tags</button>
     </Modal>
   );
 }
