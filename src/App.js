@@ -5,6 +5,7 @@ import DragDrop from "./test_components/DragDrop";
 import LazyLoadLab from "./test_components/LazyLoadLab";
 import TrelloTest from "./test_components/TrelloTest";
 import Trello from "./test_components/Trello";
+import HorDragDrop from "./test_components/HorDragDrop";
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
       {/* <ReactBeautifulDND /> */}
       {/* <LazyLoadLab /> */}
       {/* <TrelloTest /> */}
-      <Trello />
+      {/* <Trello /> */}
+      <HorDragDrop />
     </div>
   );
 }
