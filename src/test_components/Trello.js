@@ -182,6 +182,14 @@ function Trello() {
     setIsModalOpen(true);
   };
 
+  const handleDeleteCard = (columnId, cardId) => {
+    const updatedColumns = { ...columns };
+    const column = updatedColumns[columnId];
+    const updatedItems = column.items.filter((item) => item.id !== cardId);
+    column.items = updatedItems;
+    setColumns(updatedColumns);
+  };
+
   const handleUpdateTags = (cardId, updatedTags) => {
     const updatedColumns = { ...columns };
 
@@ -344,6 +352,32 @@ function Trello() {
                                       }}
                                       onClick={() => handleCardClick(item.id)}
                                     >
+                                      <div
+                                        className="button-area"
+                                        style={{
+                                          width: "100%",
+                                          display: "flex",
+                                          justifyContent: "flex-end",
+                                        }}
+                                      >
+                                        <button
+                                          style={{
+                                            fontSize: "0.8rem",
+
+                                            cursor: "pointer",
+                                            border: "none",
+                                            background: "none",
+                                          }}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDeleteCard(id, item.id);
+                                          }}
+                                        >
+                                          <span style={{ color: "black" }}>
+                                            X
+                                          </span>
+                                        </button>
+                                      </div>
                                       <div
                                         style={{
                                           display: "flex",

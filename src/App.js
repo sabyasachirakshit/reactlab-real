@@ -14,8 +14,8 @@ function App() {
       {/* <ReactBeautifulDND /> */}
       {/* <LazyLoadLab /> */}
       {/* <TrelloTest /> */}
-      {/* <Trello /> */}
-      <HorDragDrop />
+      <Trello />
+      {/* <HorDragDrop /> */}
     </div>
   );
 }
