@@ -266,6 +266,12 @@ function Trello() {
     }
   };
 
+  const handleDeleteLane = (columnId) => {
+    const updatedColumns = { ...columns };
+    delete updatedColumns[columnId];
+    setColumns(updatedColumns);
+  };
+
   return (
     <div
       className="Trello-UI"
@@ -299,7 +305,33 @@ function Trello() {
                   alignItems: "center",
                 }}
               >
+                <div
+                  className="button-area-col"
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    width: "100%",
+                  }}
+                >
+                  <button
+                    style={{
+                      position: "relative",
+                      top: 5,
+                      right: 5,
+                      fontSize: "0.8rem",
+                      fontWeight: "bold",
+                      color: "red",
+                      cursor: "pointer",
+                      border: "none",
+                      background: "none",
+                    }}
+                    onClick={() => handleDeleteLane(id)}
+                  >
+                    X
+                  </button>
+                </div>
                 <h2>{column.name}</h2>
+
                 <div style={{ margin: 8 }}>
                   <input
                     type="text"
