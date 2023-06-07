@@ -184,11 +184,26 @@ function Trello() {
   };
 
   const handleDeleteCard = (columnId, cardId) => {
-    const updatedColumns = { ...columns };
-    const column = updatedColumns[columnId];
-    const updatedItems = column.items.filter((item) => item.id !== cardId);
-    column.items = updatedItems;
-    setColumns(updatedColumns);
+    const column = columns[columnId];
+    const card = column.items.find((item) => item.id === cardId);
+
+    Modal.confirm({
+      title: "Delete Card",
+      content: (
+        <p>
+          Are you sure you want to delete the card{" "}
+          <strong>"{card.content}"</strong>?
+        </p>
+      ),
+      okText: "Delete",
+      cancelText: "Cancel",
+      onOk: () => {
+        const updatedColumns = { ...columns };
+        const updatedItems = column.items.filter((item) => item.id !== cardId);
+        column.items = updatedItems;
+        setColumns(updatedColumns);
+      },
+    });
   };
 
   const handleUpdateTags = (cardId, updatedTags) => {
