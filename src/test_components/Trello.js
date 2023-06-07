@@ -283,9 +283,24 @@ function Trello() {
   };
 
   const handleDeleteLane = (columnId) => {
-    const updatedColumns = { ...columns };
-    delete updatedColumns[columnId];
-    setColumns(updatedColumns);
+    const column = columns[columnId];
+
+    Modal.confirm({
+      title: "Delete Lane",
+      content: (
+        <p>
+          Are you sure you want to delete the lane{" "}
+          <strong>{column.name}</strong>?
+        </p>
+      ),
+      okText: "Delete",
+      cancelText: "Cancel",
+      onOk: () => {
+        const updatedColumns = { ...columns };
+        delete updatedColumns[columnId];
+        setColumns(updatedColumns);
+      },
+    });
   };
 
   return (
