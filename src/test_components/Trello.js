@@ -2,6 +2,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 import { Modal, Input } from "antd";
+import "./Trello.css";
 
 const requestedItemsFromBackend = [
   {
@@ -371,6 +372,7 @@ function Trello() {
                                       ref={provided.innerRef}
                                       {...provided.draggableProps}
                                       {...provided.dragHandleProps}
+                                      className="card"
                                       style={{
                                         userSelect: "none",
                                         padding: 16,
@@ -395,7 +397,6 @@ function Trello() {
                                         <button
                                           style={{
                                             fontSize: "0.8rem",
-
                                             cursor: "pointer",
                                             border: "none",
                                             background: "none",
@@ -406,7 +407,7 @@ function Trello() {
                                           }}
                                         >
                                           <span style={{ color: "black" }}>
-                                            X
+                                            x
                                           </span>
                                         </button>
                                       </div>
