@@ -2,6 +2,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 import { Modal, Input } from "antd";
+import "./Trello.css";
 
 const requestedItemsFromBackend = [
   {
@@ -182,6 +183,29 @@ function Trello() {
     setIsModalOpen(true);
   };
 
+  const handleDeleteCard = (columnId, cardId) => {
+    const column = columns[columnId];
+    const card = column.items.find((item) => item.id === cardId);
+
+    Modal.confirm({
+      title: "Delete Card",
+      content: (
+        <p>
+          Are you sure you want to delete the card{" "}
+          <strong>"{card.content}"</strong>?
+        </p>
+      ),
+      okText: "Delete",
+      cancelText: "Cancel",
+      onOk: () => {
+        const updatedColumns = { ...columns };
+        const updatedItems = column.items.filter((item) => item.id !== cardId);
+        column.items = updatedItems;
+        setColumns(updatedColumns);
+      },
+    });
+  };
+
   const handleUpdateTags = (cardId, updatedTags) => {
     const updatedColumns = { ...columns };
 
@@ -258,6 +282,27 @@ function Trello() {
     }
   };
 
+  const handleDeleteLane = (columnId) => {
+    const column = columns[columnId];
+
+    Modal.confirm({
+      title: "Delete Lane",
+      content: (
+        <p>
+          Are you sure you want to delete the lane{" "}
+          <strong>{column.name}</strong>?
+        </p>
+      ),
+      okText: "Delete",
+      cancelText: "Cancel",
+      onOk: () => {
+        const updatedColumns = { ...columns };
+        delete updatedColumns[columnId];
+        setColumns(updatedColumns);
+      },
+    });
+  };
+
   return (
     <div
       className="Trello-UI"
@@ -291,7 +336,33 @@ function Trello() {
                   alignItems: "center",
                 }}
               >
+                <div
+                  className="button-area-col"
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    width: "100%",
+                  }}
+                >
+                  <button
+                    style={{
+                      position: "relative",
+                      top: 5,
+                      right: 5,
+                      fontSize: "0.8rem",
+                      fontWeight: "bold",
+                      color: "red",
+                      cursor: "pointer",
+                      border: "none",
+                      background: "none",
+                    }}
+                    onClick={() => handleDeleteLane(id)}
+                  >
+                    X
+                  </button>
+                </div>
                 <h2>{column.name}</h2>
+
                 <div style={{ margin: 8 }}>
                   <input
                     type="text"
@@ -331,6 +402,7 @@ function Trello() {
                                       ref={provided.innerRef}
                                       {...provided.draggableProps}
                                       {...provided.dragHandleProps}
+                                      className="card"
                                       style={{
                                         userSelect: "none",
                                         padding: 16,
@@ -344,6 +416,31 @@ function Trello() {
                                       }}
                                       onClick={() => handleCardClick(item.id)}
                                     >
+                                      <div
+                                        className="button-area"
+                                        style={{
+                                          width: "100%",
+                                          display: "flex",
+                                          justifyContent: "flex-end",
+                                        }}
+                                      >
+                                        <button
+                                          style={{
+                                            fontSize: "0.8rem",
+                                            cursor: "pointer",
+                                            border: "none",
+                                            background: "none",
+                                          }}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDeleteCard(id, item.id);
+                                          }}
+                                        >
+                                          <span style={{ color: "black" }}>
+                                            x
+                                          </span>
+                                        </button>
+                                      </div>
                                       <div
                                         style={{
                                           display: "flex",
