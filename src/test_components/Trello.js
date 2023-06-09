@@ -203,7 +203,29 @@ function Trello() {
           }
         }
       }
-      console.log(allTags);
+      // console.log(allTags);
+      const cardsByTag = {};
+
+      // Iterate over each column
+      for (const columnId in columnsFromBackend) {
+        const column = columnsFromBackend[columnId];
+
+        // Iterate over each item in the column
+        for (const item of column.items) {
+          // Iterate over each tag in the item
+          for (const tag of item.tags) {
+            // Create an array for the tag if it doesn't exist already
+            if (!cardsByTag[tag]) {
+              cardsByTag[tag] = [];
+            }
+
+            // Add the item to the corresponding tag array
+            cardsByTag[tag].push(item);
+          }
+        }
+      }
+
+      console.log(cardsByTag);
     }
 
     // Update the dropdown button text
