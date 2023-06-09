@@ -520,7 +520,7 @@ function Trello() {
                                                 cursor: "pointer",
                                                 width:
                                                   tag.length < 5
-                                                    ? "30%"
+                                                    ? "32%"
                                                     : "fit-content",
                                                 textAlign: "center",
                                                 borderRadius: 20,
