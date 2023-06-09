@@ -1,7 +1,8 @@
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
-import { Modal, Input } from "antd";
+import { Modal, Input, Dropdown, Menu, Button } from "antd";
+
 import "./Trello.css";
 
 const requestedItemsFromBackend = [
@@ -177,6 +178,45 @@ function Trello() {
   const [columns, setColumns] = useState(columnsFromBackend);
   const [selectedCardId, setSelectedCardId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [dropdownButtonText, setDropdownButtonText] = useState("Option 1");
+
+  const handleMenuClick = (e) => {
+    console.log("Menu clicked:", e.key);
+    // Handle menu option selection here
+
+    // Check if Option 2 is clicked
+    if (e.key === "option2") {
+      const allTags = [];
+
+      // Iterate over each column
+      for (const columnId in columnsFromBackend) {
+        const column = columnsFromBackend[columnId];
+
+        // Iterate over each item in the column
+        for (const item of column.items) {
+          // Iterate over each tag in the item
+          for (const tag of item.tags) {
+            // Add the tag to the `allTags` array if it doesn't exist already
+            if (!allTags.includes(tag)) {
+              allTags.push(tag);
+            }
+          }
+        }
+      }
+      console.log(allTags);
+    }
+
+    // Update the dropdown button text
+    setDropdownButtonText(e.item.props.children);
+  };
+
+  const menu = (
+    <Menu onClick={handleMenuClick}>
+      <Menu.Item key="option1">Option 1</Menu.Item>
+      <Menu.Item key="option2">Group By Tags</Menu.Item>
+      <Menu.Item key="option3">Option 3</Menu.Item>
+    </Menu>
+  );
 
   const handleCardClick = (cardId) => {
     setSelectedCardId(cardId);
@@ -317,6 +357,9 @@ function Trello() {
       <button style={{ width: "13%" }} onClick={handleCreateLane}>
         Add New Lane
       </button>
+      <Dropdown overlay={menu}>
+        <Button style={{ width: "13%" }}>{dropdownButtonText}</Button>
+      </Dropdown>
       <div
         style={{
           display: "flex",
