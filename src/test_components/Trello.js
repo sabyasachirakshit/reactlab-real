@@ -178,65 +178,57 @@ function Trello() {
   const [columns, setColumns] = useState(columnsFromBackend);
   const [selectedCardId, setSelectedCardId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [dropdownButtonText, setDropdownButtonText] = useState("Option 1");
+  const [dropdownButtonText, setDropdownButtonText] =
+    useState("Group by Status");
 
   const handleMenuClick = (e) => {
-    console.log("Menu clicked:", e.key);
-    // Handle menu option selection here
+    if (e.key === "option1") {
+      setColumns(columnsFromBackend);
+    }
 
-    // Check if Option 2 is clicked
     if (e.key === "option2") {
       const allTags = [];
+      const cardsByTag = {};
 
-      // Iterate over each column
-      for (const columnId in columnsFromBackend) {
-        const column = columnsFromBackend[columnId];
+      for (const columnId in columns) {
+        const column = columns[columnId];
 
-        // Iterate over each item in the column
         for (const item of column.items) {
-          // Iterate over each tag in the item
           for (const tag of item.tags) {
-            // Add the tag to the `allTags` array if it doesn't exist already
             if (!allTags.includes(tag)) {
               allTags.push(tag);
             }
-          }
-        }
-      }
-      // console.log(allTags);
-      const cardsByTag = {};
 
-      // Iterate over each column
-      for (const columnId in columnsFromBackend) {
-        const column = columnsFromBackend[columnId];
-
-        // Iterate over each item in the column
-        for (const item of column.items) {
-          // Iterate over each tag in the item
-          for (const tag of item.tags) {
-            // Create an array for the tag if it doesn't exist already
             if (!cardsByTag[tag]) {
               cardsByTag[tag] = [];
             }
 
-            // Add the item to the corresponding tag array
             cardsByTag[tag].push(item);
           }
         }
       }
 
-      console.log(cardsByTag);
+      setColumns({});
+
+      const newColumns = {};
+      for (const tag of allTags) {
+        newColumns[uuid()] = {
+          name: tag,
+          items: cardsByTag[tag],
+          inputValue: "",
+        };
+      }
+
+      setColumns(newColumns);
     }
 
-    // Update the dropdown button text
     setDropdownButtonText(e.item.props.children);
   };
 
   const menu = (
     <Menu onClick={handleMenuClick}>
-      <Menu.Item key="option1">Option 1</Menu.Item>
-      <Menu.Item key="option2">Group By Tags</Menu.Item>
-      <Menu.Item key="option3">Option 3</Menu.Item>
+      <Menu.Item key="option1">Group by Status</Menu.Item>
+      <Menu.Item key="option2">Group by Tags</Menu.Item>
     </Menu>
   );
 
