@@ -1,7 +1,8 @@
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
-import { Modal, Input } from "antd";
+import { Modal, Input, Dropdown, Menu, Button } from "antd";
+
 import "./Trello.css";
 
 const requestedItemsFromBackend = [
@@ -177,6 +178,59 @@ function Trello() {
   const [columns, setColumns] = useState(columnsFromBackend);
   const [selectedCardId, setSelectedCardId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [dropdownButtonText, setDropdownButtonText] =
+    useState("Group by Status");
+
+  const handleMenuClick = (e) => {
+    if (e.key === "option1") {
+      setColumns(columnsFromBackend);
+    }
+
+    if (e.key === "option2") {
+      const allTags = [];
+      const cardsByTag = {};
+
+      for (const columnId in columns) {
+        const column = columns[columnId];
+
+        for (const item of column.items) {
+          for (const tag of item.tags) {
+            if (!allTags.includes(tag)) {
+              allTags.push(tag);
+            }
+
+            if (!cardsByTag[tag]) {
+              cardsByTag[tag] = [];
+            }
+
+            cardsByTag[tag].push(item);
+          }
+        }
+      }
+
+      setColumns({});
+
+      const newColumns = {};
+      for (const tag of allTags) {
+        newColumns[uuid()] = {
+          name: tag,
+          items: cardsByTag[tag],
+          inputValue: "",
+        };
+      }
+
+      setColumns(newColumns);
+    }
+
+    setDropdownButtonText(e.item.props.children);
+  };
+
+  const menu = (
+    <Menu onClick={handleMenuClick}>
+      <Menu.Item key="option1">Group by Status</Menu.Item>
+      <Menu.Item key="option2">Group by Tags</Menu.Item>
+    </Menu>
+  );
 
   const handleCardClick = (cardId) => {
     setSelectedCardId(cardId);
@@ -317,6 +371,9 @@ function Trello() {
       <button style={{ width: "13%" }} onClick={handleCreateLane}>
         Add New Lane
       </button>
+      <Dropdown overlay={menu}>
+        <Button style={{ width: "13%" }}>{dropdownButtonText}</Button>
+      </Dropdown>
       <div
         style={{
           display: "flex",
@@ -463,7 +520,7 @@ function Trello() {
                                                 cursor: "pointer",
                                                 width:
                                                   tag.length < 5
-                                                    ? "30%"
+                                                    ? "32%"
                                                     : "fit-content",
                                                 textAlign: "center",
                                                 borderRadius: 20,
