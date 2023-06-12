@@ -1,7 +1,7 @@
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
-import { Modal, Input, Dropdown, Menu, Button } from "antd";
+import { Modal, Input, Dropdown, Menu, Button, Tag } from "antd";
 
 import "./Trello.css";
 
@@ -368,12 +368,23 @@ function Trello() {
         gap: 12,
       }}
     >
-      <button style={{ width: "13%" }} onClick={handleCreateLane}>
-        Add New Lane
-      </button>
-      <Dropdown overlay={menu}>
-        <Button style={{ width: "13%" }}>{dropdownButtonText}</Button>
-      </Dropdown>
+      <div
+        className="corner-menu"
+        style={{
+          gap: 20,
+          width: "100%",
+          display: "flex",
+          justifyContent: "end",
+        }}
+      >
+        <button style={{ width: "13%" }} onClick={handleCreateLane}>
+          Add New Lane
+        </button>
+        <Dropdown overlay={menu}>
+          <Button style={{ width: "13%" }}>{dropdownButtonText}</Button>
+        </Dropdown>
+      </div>
+
       <div
         style={{
           display: "flex",
