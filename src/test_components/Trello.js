@@ -509,6 +509,15 @@ function Trello() {
                                           </span>
                                         </button>
                                       </div>
+
+                                      <div
+                                        style={{
+                                          cursor: "pointer",
+                                          marginBottom: 18,
+                                        }}
+                                      >
+                                        <b>{item.content}</b>
+                                      </div>
                                       <div
                                         style={{
                                           display: "flex",
@@ -519,16 +528,17 @@ function Trello() {
                                       >
                                         {item.tags &&
                                           item.tags.map((tag, tagIndex) => (
-                                            <div
+                                            <Tag
                                               key={tag}
+                                              color={
+                                                colorArray[
+                                                  tagIndex % colorArray.length
+                                                ]
+                                              }
                                               style={{
-                                                backgroundColor:
-                                                  colorArray[
-                                                    tagIndex % colorArray.length
-                                                  ],
-                                                color: "black",
                                                 padding: 10,
                                                 cursor: "pointer",
+                                                color: "black",
                                                 width:
                                                   tag.length < 5
                                                     ? "32%"
@@ -538,12 +548,9 @@ function Trello() {
                                               }}
                                             >
                                               {tag}
-                                            </div>
+                                            </Tag>
                                           ))}
                                       </div>
-                                      <span style={{ cursor: "pointer" }}>
-                                        <b>{item.content}</b>
-                                      </span>
                                     </div>
                                   );
                                 }}
