@@ -132,10 +132,12 @@ const onDragEnd = (result, columns, setColumns) => {
 };
 
 function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
+  console.log("Step 3");
   const [updatedTitle, setUpdatedTitle] = useState("");
   const [updatedTags, setUpdatedTags] = useState([]);
 
   const handleUpdateCardModalDetails = () => {
+    console.log("Step 5");
     if (updatedTitle && updatedTitle !== "") {
       onUpdateTitle(cardId, updatedTitle);
     }
@@ -241,10 +243,12 @@ function Trello() {
     setColumns(updatedColumns);
   };
 
-  const handleMoreMenuClick = (menuClickEvent, cardId) => {
+  const handleMoreMenuClick = (menuClickEvent, cardId, columnId) => {
+    console.log("Step 1");
     const { key } = menuClickEvent;
     if (key === "edit") {
-      setSelectedCardId(cardId);
+      console.log("step 2");
+      setSelectedCardId(columnId);
       setIsModalOpen(true);
     } else if (key === "delete") {
       setDeleteConfirmationVisible(true);
@@ -252,6 +256,7 @@ function Trello() {
   };
 
   const handleUpdateTags = (cardId, updatedTags) => {
+    console.log("Step 4");
     const updatedColumns = { ...columns };
 
     for (const columnId in updatedColumns) {
@@ -267,6 +272,7 @@ function Trello() {
   };
 
   const handleUpdateTitle = (cardId, updatedTitle) => {
+    console.log("Step 6");
     const updatedColumns = { ...columns };
 
     for (const columnId in updatedColumns) {
