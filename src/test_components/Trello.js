@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 import { Modal, Input, Dropdown, Menu, Button, Tag, Popconfirm } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
-import "./Trello.css";
 
 const requestedItemsFromBackend = [
   {
@@ -234,37 +233,15 @@ function Trello() {
     </Menu>
   );
 
-  const handleCardClick = (cardId) => {
-    setSelectedCardId(cardId);
-    setIsModalOpen(true);
-  };
-
   const handleDeleteCard = (columnId, cardId) => {
     const column = columns[columnId];
-    const card = column.items.find((item) => item.id === cardId);
-
     const updatedColumns = { ...columns };
     const updatedItems = column.items.filter((item) => item.id !== cardId);
     column.items = updatedItems;
     setColumns(updatedColumns);
   };
 
-  const handleMoreOptionsClick = (e, columnId, cardId) => {
-    e.stopPropagation();
-    const menu = (
-      <Menu
-        onClick={(menuClickEvent) =>
-          handleMoreMenuClick(menuClickEvent, columnId, cardId)
-        }
-      >
-        <Menu.Item key="delete">Delete Card</Menu.Item>
-        <Menu.Item key="edit">Edit Card</Menu.Item>
-      </Menu>
-    );
-    Dropdown.overlayInstance = menu;
-  };
-
-  const handleMoreMenuClick = (menuClickEvent, columnId, cardId) => {
+  const handleMoreMenuClick = (menuClickEvent, cardId) => {
     const { key } = menuClickEvent;
     if (key === "edit") {
       setSelectedCardId(cardId);
