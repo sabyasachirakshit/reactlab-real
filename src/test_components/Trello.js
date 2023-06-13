@@ -1,7 +1,7 @@
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
-import { Modal, Input, Dropdown, Menu, Button, Tag } from "antd";
+import { Modal, Input, Dropdown, Menu, Button, Tag, Popconfirm } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import "./Trello.css";
 
@@ -178,6 +178,8 @@ function Trello() {
   const [columns, setColumns] = useState(columnsFromBackend);
   const [selectedCardId, setSelectedCardId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
+    useState(false);
   const [dropdownButtonText, setDropdownButtonText] =
     useState("Group by Status");
 
@@ -241,23 +243,10 @@ function Trello() {
     const column = columns[columnId];
     const card = column.items.find((item) => item.id === cardId);
 
-    Modal.confirm({
-      title: "Delete Card",
-      content: (
-        <p>
-          Are you sure you want to delete the card{" "}
-          <strong>"{card.content}"</strong>?
-        </p>
-      ),
-      okText: "Delete",
-      cancelText: "Cancel",
-      onOk: () => {
-        const updatedColumns = { ...columns };
-        const updatedItems = column.items.filter((item) => item.id !== cardId);
-        column.items = updatedItems;
-        setColumns(updatedColumns);
-      },
-    });
+    const updatedColumns = { ...columns };
+    const updatedItems = column.items.filter((item) => item.id !== cardId);
+    column.items = updatedItems;
+    setColumns(updatedColumns);
   };
 
   const handleMoreOptionsClick = (e, columnId, cardId) => {
@@ -277,11 +266,11 @@ function Trello() {
 
   const handleMoreMenuClick = (menuClickEvent, columnId, cardId) => {
     const { key } = menuClickEvent;
-    if (key === "delete") {
-      handleDeleteCard(columnId, cardId);
-    } else if (key === "edit") {
+    if (key === "edit") {
       setSelectedCardId(cardId);
       setIsModalOpen(true);
+    } else if (key === "delete") {
+      setDeleteConfirmationVisible(true);
     }
   };
 
@@ -528,25 +517,38 @@ function Trello() {
                                                 )
                                               }
                                             >
-                                              <Menu.Item key="delete">
-                                                Delete Card
-                                              </Menu.Item>
                                               <Menu.Item key="edit">
                                                 Edit Card
+                                              </Menu.Item>
+                                              <Menu.Item key="delete">
+                                                <Popconfirm
+                                                  title="Are you sure you want to delete this card?"
+                                                  visible={
+                                                    deleteConfirmationVisible
+                                                  }
+                                                  onConfirm={(e) => {
+                                                    e.stopPropagation();
+                                                    handleDeleteCard(
+                                                      id,
+                                                      item.id
+                                                    );
+                                                  }}
+                                                  onCancel={() =>
+                                                    setDeleteConfirmationVisible(
+                                                      false
+                                                    )
+                                                  }
+                                                  okText="Yes"
+                                                  cancelText="No"
+                                                >
+                                                  Delete Card
+                                                </Popconfirm>
                                               </Menu.Item>
                                             </Menu>
                                           }
                                           trigger={["click"]}
                                         >
-                                          <MoreOutlined
-                                            onClick={(e) =>
-                                              handleMoreOptionsClick(
-                                                e,
-                                                id,
-                                                item.id
-                                              )
-                                            }
-                                          />
+                                          <MoreOutlined />
                                         </Dropdown>
                                       </div>
 
