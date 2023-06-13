@@ -260,6 +260,31 @@ function Trello() {
     });
   };
 
+  const handleMoreOptionsClick = (e, columnId, cardId) => {
+    e.stopPropagation();
+    const menu = (
+      <Menu
+        onClick={(menuClickEvent) =>
+          handleMoreMenuClick(menuClickEvent, columnId, cardId)
+        }
+      >
+        <Menu.Item key="delete">Delete Card</Menu.Item>
+        <Menu.Item key="edit">Edit Card</Menu.Item>
+      </Menu>
+    );
+    Dropdown.overlayInstance = menu;
+  };
+
+  const handleMoreMenuClick = (menuClickEvent, columnId, cardId) => {
+    const { key } = menuClickEvent;
+    if (key === "delete") {
+      handleDeleteCard(columnId, cardId);
+    } else if (key === "edit") {
+      setSelectedCardId(cardId);
+      setIsModalOpen(true);
+    }
+  };
+
   const handleUpdateTags = (cardId, updatedTags) => {
     const updatedColumns = { ...columns };
 
@@ -482,7 +507,7 @@ function Trello() {
                                         color: "black",
                                         ...provided.draggableProps.style,
                                       }}
-                                      onClick={() => handleCardClick(item.id)}
+                                      // onClick={() => handleCardClick(item.id)}
                                     >
                                       <div
                                         className="button-area"
@@ -492,12 +517,37 @@ function Trello() {
                                           justifyContent: "flex-end",
                                         }}
                                       >
-                                        <MoreOutlined
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleDeleteCard(id, item.id);
-                                          }}
-                                        />
+                                        <Dropdown
+                                          overlay={
+                                            <Menu
+                                              onClick={(e) =>
+                                                handleMoreMenuClick(
+                                                  e,
+                                                  id,
+                                                  item.id
+                                                )
+                                              }
+                                            >
+                                              <Menu.Item key="delete">
+                                                Delete Card
+                                              </Menu.Item>
+                                              <Menu.Item key="edit">
+                                                Edit Card
+                                              </Menu.Item>
+                                            </Menu>
+                                          }
+                                          trigger={["click"]}
+                                        >
+                                          <MoreOutlined
+                                            onClick={(e) =>
+                                              handleMoreOptionsClick(
+                                                e,
+                                                id,
+                                                item.id
+                                              )
+                                            }
+                                          />
+                                        </Dropdown>
                                       </div>
 
                                       <div
