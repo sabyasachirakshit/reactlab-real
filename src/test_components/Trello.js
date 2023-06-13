@@ -2,7 +2,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 import { Modal, Input, Dropdown, Menu, Button, Tag } from "antd";
-
+import { MoreOutlined } from "@ant-design/icons";
 import "./Trello.css";
 
 const requestedItemsFromBackend = [
@@ -492,22 +492,12 @@ function Trello() {
                                           justifyContent: "flex-end",
                                         }}
                                       >
-                                        <button
-                                          style={{
-                                            fontSize: "0.8rem",
-                                            cursor: "pointer",
-                                            border: "none",
-                                            background: "none",
-                                          }}
+                                        <MoreOutlined
                                           onClick={(e) => {
                                             e.stopPropagation();
                                             handleDeleteCard(id, item.id);
                                           }}
-                                        >
-                                          <span style={{ color: "black" }}>
-                                            x
-                                          </span>
-                                        </button>
+                                        />
                                       </div>
 
                                       <div
