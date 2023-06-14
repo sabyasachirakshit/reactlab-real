@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 import { Modal, Input, Dropdown, Menu, Button, Tag, Popconfirm } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
+import { SketchPicker } from "react-color";
 
 const requestedItemsFromBackend = [
   {
@@ -146,10 +147,23 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
     }
     onClose();
   };
-
   const handleTagsInputChange = (e) => {
-    const tags = e.target.value.split(",").map((tag) => tag.trim());
+    const tags = e.target.value.split(",").map((tag) => {
+      const [name, color] = tag.trim().split(":");
+      return {
+        name: name ? name.trim() : "",
+        color: color ? color.trim() : "",
+      };
+    });
     setUpdatedTags(tags);
+  };
+
+  const handleTagColorChange = (tagIndex, color) => {
+    const updatedTagsCopy = [...updatedTags];
+    if (updatedTagsCopy[tagIndex]) {
+      updatedTagsCopy[tagIndex].color = color.hex;
+      setUpdatedTags(updatedTagsCopy);
+    }
   };
 
   return (
@@ -166,11 +180,20 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
         placeholder="Update Your Card Title"
       />
       <Input
-        value={updatedTags}
+        value={updatedTags.map((tag) => `${tag.name}: ${tag.color}`)}
         style={{ marginBottom: 10 }}
         onChange={handleTagsInputChange}
-        placeholder="Update Your Tags Separated By Commas"
+        placeholder="Update Your Tags (e.g., Tag1: #FFCDD2, Tag2: #BBDEFB)"
       />
+      {updatedTags.map((tag, index) => (
+        <div key={index}>
+          <span>{tag.name}</span>
+          <SketchPicker
+            color={tag.color}
+            onChange={(color) => handleTagColorChange(index, color)}
+          />
+        </div>
+      ))}
     </Modal>
   );
 }
@@ -545,11 +568,7 @@ function Trello() {
                                           item.tags.map((tag, tagIndex) => (
                                             <Tag
                                               key={tag}
-                                              color={
-                                                colorArray[
-                                                  tagIndex % colorArray.length
-                                                ]
-                                              }
+                                              color={tag.color}
                                               style={{
                                                 padding: 10,
                                                 cursor: "pointer",
@@ -562,7 +581,7 @@ function Trello() {
                                                 borderRadius: 20,
                                               }}
                                             >
-                                              {tag}
+                                              {tag.name}
                                             </Tag>
                                           ))}
                                       </div>
