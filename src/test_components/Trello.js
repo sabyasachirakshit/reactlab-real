@@ -179,8 +179,6 @@ function Trello() {
   const [columns, setColumns] = useState(columnsFromBackend);
   const [selectedCardId, setSelectedCardId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
-    useState(false);
   const [dropdownButtonText, setDropdownButtonText] =
     useState("Group by Status");
 
@@ -251,7 +249,7 @@ function Trello() {
       setSelectedCardId(columnId);
       setIsModalOpen(true);
     } else if (key === "delete") {
-      setDeleteConfirmationVisible(true);
+      console.log(cardId);
     }
   };
 
@@ -506,9 +504,6 @@ function Trello() {
                                               <Menu.Item key="delete">
                                                 <Popconfirm
                                                   title="Are you sure you want to delete this card?"
-                                                  visible={
-                                                    deleteConfirmationVisible
-                                                  }
                                                   onConfirm={(e) => {
                                                     e.stopPropagation();
                                                     handleDeleteCard(
@@ -516,11 +511,6 @@ function Trello() {
                                                       item.id
                                                     );
                                                   }}
-                                                  onCancel={() =>
-                                                    setDeleteConfirmationVisible(
-                                                      false
-                                                    )
-                                                  }
                                                   okText="Yes"
                                                   cancelText="No"
                                                 >
