@@ -9,54 +9,96 @@ const requestedItemsFromBackend = [
   {
     id: uuid(),
     content: "Make Trello board UI",
-    tags: ["React JS", "Pointers"],
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "pointers", color: "#BBDEFB" },
+    ],
   },
   {
     id: uuid(),
     content: "Use React-Beautiful-DND package",
-    tags: ["React JS", "Pointers"],
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "pointers", color: "#BBDEFB" },
+    ],
   },
   {
     id: uuid(),
     content: "Make Multiple Lanes",
-    tags: ["React JS", "Pointers"],
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "pointers", color: "#BBDEFB" },
+    ],
   },
   {
     id: uuid(),
     content: "Write logic for Draggable",
-    tags: ["React JS", "Pointers"],
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "pointers", color: "#BBDEFB" },
+    ],
   },
 ];
-const colorArray = [
-  "#FFCDD2",
-  "#BBDEFB",
-  "#C8E6C9",
-  "#E1BEE7",
-  "#FF00FF",
-  "#00FFFF",
-];
+// const colorArray = [
+//   "#FFCDD2",
+//   "#BBDEFB",
+//   "#C8E6C9",
+//   "#E1BEE7",
+//   "#FF00FF",
+//   "#00FFFF",
+// ];
 
 const requestedItemsFromBackend2 = [
-  { id: uuid(), content: "Clean House", tags: ["Cleaning", "Hobby"] },
+  {
+    id: uuid(),
+    content: "Clean House",
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "pointers", color: "#BBDEFB" },
+    ],
+  },
   {
     id: uuid(),
     content: "Buy Groceries",
-    tags: ["Shopping"],
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "pointers", color: "#BBDEFB" },
+    ],
   },
-  { id: uuid(), content: "Cook Food", tags: ["Hobby", "Cooking"] },
+  {
+    id: uuid(),
+    content: "Cook Food",
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "pointers", color: "#BBDEFB" },
+    ],
+  },
 ];
 
 const requestedItemsFromBackend3 = [
-  { id: uuid(), content: "Go for Morning Walk", tags: ["Health", "Workout"] },
+  {
+    id: uuid(),
+    content: "Go for Morning Walk",
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "pointers", color: "#BBDEFB" },
+    ],
+  },
   {
     id: uuid(),
     content: "Organize Accessories",
-    tags: ["Personal", "Home", "Cleanliness"],
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "pointers", color: "#BBDEFB" },
+    ],
   },
   {
     id: uuid(),
     content: "Read Books",
-    tags: ["Hobby", "Reading", "Entertainment"],
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "pointers", color: "#BBDEFB" },
+    ],
   },
 ];
 
@@ -64,12 +106,18 @@ const requestedItemsFromBackend4 = [
   {
     id: uuid(),
     content: "Watch Football Match",
-    tags: ["Game", "Entertainment"],
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "pointers", color: "#BBDEFB" },
+    ],
   },
   {
     id: uuid(),
     content: "Hang out with Friends",
-    tags: ["Entertainment"],
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "pointers", color: "#BBDEFB" },
+    ],
   },
 ];
 
@@ -219,20 +267,21 @@ function Trello() {
 
         for (const item of column.items) {
           for (const tag of item.tags) {
-            if (!allTags.includes(tag)) {
-              allTags.push(tag);
+            const tagName = tag.name; // Access the name property of the tag object
+            if (!allTags.includes(tagName)) {
+              allTags.push(tagName);
             }
 
-            if (!cardsByTag[tag]) {
-              cardsByTag[tag] = [];
+            if (!cardsByTag[tagName]) {
+              cardsByTag[tagName] = [];
             }
 
-            cardsByTag[tag].push(item);
+            cardsByTag[tagName].push(item);
           }
         }
       }
 
-      setColumns({});
+      setColumns(Object.values(columnsFromBackend));
 
       const newColumns = {};
       for (const tag of allTags) {
@@ -243,7 +292,7 @@ function Trello() {
         };
       }
 
-      setColumns(newColumns);
+      setColumns({ ...newColumns });
     }
 
     setDropdownButtonText(e.item.props.children);
