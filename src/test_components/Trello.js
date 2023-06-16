@@ -168,7 +168,6 @@ const onDragEnd = (result, columns, setColumns) => {
 };
 
 function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
-  // Function to find the tags for a given card ID in an array of items
   const findTagsForCardId = (cardId, items) => {
     const matchingItem = items.find((item) => item.id === cardId);
     if (matchingItem) {
@@ -177,7 +176,6 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
     return [];
   };
 
-  // Combine all the data arrays into a single array
   const allItems = [
     ...requestedItemsFromBackend,
     ...requestedItemsFromBackend2,
@@ -185,7 +183,6 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
     ...requestedItemsFromBackend4,
   ];
 
-  // Find tags for CardId in allItems
   const tagsFromAllItems = findTagsForCardId(cardId, allItems);
   console.log(tagsFromAllItems);
 
@@ -193,7 +190,6 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
   const [updatedTags, setUpdatedTags] = useState([]);
 
   const handleUpdateCardModalDetails = () => {
-    console.log("Step 5");
     if (updatedTitle && updatedTitle !== "") {
       onUpdateTitle(cardId, updatedTitle);
     }
@@ -272,7 +268,7 @@ function Trello() {
 
         for (const item of column.items) {
           for (const tag of item.tags) {
-            const tagName = tag.name; // Access the name property of the tag object
+            const tagName = tag.name;
             if (!allTags.includes(tagName)) {
               allTags.push(tagName);
             }
@@ -319,10 +315,8 @@ function Trello() {
   };
 
   const handleMoreMenuClick = (menuClickEvent, cardId, columnId) => {
-    console.log("Step 1");
     const { key } = menuClickEvent;
     if (key === "edit") {
-      console.log("step 2");
       setSelectedCardId(columnId);
       setIsModalOpen(true);
     } else if (key === "delete") {
@@ -331,7 +325,6 @@ function Trello() {
   };
 
   const handleUpdateTags = (cardId, updatedTags) => {
-    console.log("Step 4");
     const updatedColumns = { ...columns };
 
     for (const columnId in updatedColumns) {
@@ -347,7 +340,6 @@ function Trello() {
   };
 
   const handleUpdateTitle = (cardId, updatedTitle) => {
-    console.log("Step 6");
     const updatedColumns = { ...columns };
 
     for (const columnId in updatedColumns) {
