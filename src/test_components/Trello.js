@@ -132,7 +132,27 @@ const onDragEnd = (result, columns, setColumns) => {
 };
 
 function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
-  console.log("Step 3");
+  // Function to find the tags for a given card ID in an array of items
+  const findTagsForCardId = (cardId, items) => {
+    const matchingItem = items.find((item) => item.id === cardId);
+    if (matchingItem) {
+      return matchingItem.tags;
+    }
+    return [];
+  };
+
+  // Combine all the data arrays into a single array
+  const allItems = [
+    ...requestedItemsFromBackend,
+    ...requestedItemsFromBackend2,
+    ...requestedItemsFromBackend3,
+    ...requestedItemsFromBackend4,
+  ];
+
+  // Find tags for CardId in allItems
+  const tagsFromAllItems = findTagsForCardId(cardId, allItems);
+  console.log(tagsFromAllItems);
+
   const [updatedTitle, setUpdatedTitle] = useState("");
   const [updatedTags, setUpdatedTags] = useState([]);
 
@@ -171,6 +191,14 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
         onChange={handleTagsInputChange}
         placeholder="Update Your Tags Separated By Commas"
       />
+      {tagsFromAllItems.map((item, index) => {
+        return (
+          <>
+            <b>Tags:</b>
+            {item}
+          </>
+        );
+      })}
     </Modal>
   );
 }
