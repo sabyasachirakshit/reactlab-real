@@ -8,54 +8,87 @@ const requestedItemsFromBackend = [
   {
     id: uuid(),
     content: "Make Trello board UI",
-    tags: ["React JS", "Pointers"],
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "pointers", color: "#BBDEFB" },
+    ],
   },
   {
     id: uuid(),
     content: "Use React-Beautiful-DND package",
-    tags: ["React JS", "Pointers"],
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "pointers", color: "#BBDEFB" },
+    ],
   },
   {
     id: uuid(),
     content: "Make Multiple Lanes",
-    tags: ["React JS", "Pointers"],
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "pointers", color: "#BBDEFB" },
+    ],
   },
   {
     id: uuid(),
     content: "Write logic for Draggable",
-    tags: ["React JS", "Pointers"],
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "pointers", color: "#BBDEFB" },
+    ],
   },
-];
-const colorArray = [
-  "#FFCDD2",
-  "#BBDEFB",
-  "#C8E6C9",
-  "#E1BEE7",
-  "#FF00FF",
-  "#00FFFF",
 ];
 
 const requestedItemsFromBackend2 = [
-  { id: uuid(), content: "Clean House", tags: ["Cleaning", "Hobby"] },
+  {
+    id: uuid(),
+    content: "Clean House",
+    tags: [
+      { name: "Cleaning", color: "#FFCDD2" },
+      { name: "Hobby", color: "#BBDEFB" },
+    ],
+  },
   {
     id: uuid(),
     content: "Buy Groceries",
-    tags: ["Shopping"],
+    tags: [{ name: "Shopping", color: "#FFCDD2" }],
   },
-  { id: uuid(), content: "Cook Food", tags: ["Hobby", "Cooking"] },
+  {
+    id: uuid(),
+    content: "Cook Food",
+    tags: [
+      { name: "Cooking", color: "#FFCDD2" },
+      { name: "Hobby", color: "#BBDEFB" },
+    ],
+  },
 ];
 
 const requestedItemsFromBackend3 = [
-  { id: uuid(), content: "Go for Morning Walk", tags: ["Health", "Workout"] },
+  {
+    id: uuid(),
+    content: "Go for Morning Walk",
+    tags: [
+      { name: "Health", color: "#FFCDD2" },
+      { name: "Workout", color: "#BBDEFB" },
+    ],
+  },
   {
     id: uuid(),
     content: "Organize Accessories",
-    tags: ["Personal", "Home", "Cleanliness"],
+    tags: [
+      { name: "Personal", color: "#FFCDD2" },
+      { name: "Home", color: "#BBDEFB" },
+      { name: "Cleanliness", color: "#C8E6C9" },
+    ],
   },
   {
     id: uuid(),
     content: "Read Books",
-    tags: ["Hobby", "Reading", "Entertainment"],
+    tags: [
+      { name: "Hobby", color: "#FFCDD2" },
+      { name: "Reading", color: "#BBDEFB" },
+      { name: "Entertainment", color: "#C8E6C9" },
+    ],
   },
 ];
 
@@ -63,12 +96,15 @@ const requestedItemsFromBackend4 = [
   {
     id: uuid(),
     content: "Watch Football Match",
-    tags: ["Game", "Entertainment"],
+    tags: [
+      { name: "Game", color: "#FFCDD2" },
+      { name: "Entertainment", color: "#BBDEFB" },
+    ],
   },
   {
     id: uuid(),
     content: "Hang out with Friends",
-    tags: ["Entertainment"],
+    tags: [{ name: "Entertainment", color: "#FFCDD2" }],
   },
 ];
 
@@ -191,12 +227,24 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
         onChange={handleTagsInputChange}
         placeholder="Update Your Tags Separated By Commas"
       />
-      {tagsFromAllItems.map((item, index) => {
+      {tagsFromAllItems.map((tag, index) => {
         return (
-          <>
-            <b>Tags:</b>
-            {item}
-          </>
+          <div
+            className="all-tags"
+            key={index}
+            style={{ display: "flex", flexDirection: "column", gap: "5px" }}
+          >
+            <div className="tag" style={{ display: "flex", gap: "5px" }}>
+              <div className="tag-name">
+                <b>Tag:</b>
+                {tag.name}
+              </div>
+              <div className="tag-color">
+                <b>Color:</b>
+                {tag.color}
+              </div>
+            </div>
+          </div>
         );
       })}
     </Modal>
@@ -224,15 +272,16 @@ function Trello() {
 
         for (const item of column.items) {
           for (const tag of item.tags) {
-            if (!allTags.includes(tag)) {
-              allTags.push(tag);
+            const tagName = tag.name; // Access the name property of the tag object
+            if (!allTags.includes(tagName)) {
+              allTags.push(tagName);
             }
 
-            if (!cardsByTag[tag]) {
-              cardsByTag[tag] = [];
+            if (!cardsByTag[tagName]) {
+              cardsByTag[tagName] = [];
             }
 
-            cardsByTag[tag].push(item);
+            cardsByTag[tagName].push(item);
           }
         }
       }
@@ -572,12 +621,8 @@ function Trello() {
                                         {item.tags &&
                                           item.tags.map((tag, tagIndex) => (
                                             <Tag
-                                              key={tag}
-                                              color={
-                                                colorArray[
-                                                  tagIndex % colorArray.length
-                                                ]
-                                              }
+                                              key={tagIndex}
+                                              color={tag.color}
                                               style={{
                                                 padding: 10,
                                                 cursor: "pointer",
@@ -590,7 +635,7 @@ function Trello() {
                                                 borderRadius: 20,
                                               }}
                                             >
-                                              {tag}
+                                              {tag.name}
                                             </Tag>
                                           ))}
                                       </div>
