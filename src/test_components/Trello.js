@@ -167,7 +167,7 @@ const onDragEnd = (result, columns, setColumns) => {
   }
 };
 
-function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
+const CardDetailModal = ({ cardId, onClose, onUpdateTitle, onUpdateTags }) => {
   const findTagsForCardId = (cardId, items) => {
     const matchingItem = items.find((item) => item.id === cardId);
     if (matchingItem) {
@@ -184,7 +184,6 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
   ];
 
   const tagsFromAllItems = findTagsForCardId(cardId, allItems);
-  console.log(tagsFromAllItems);
 
   const [updatedTitle, setUpdatedTitle] = useState("");
   const [updatedTags, setUpdatedTags] = useState([]);
@@ -199,9 +198,14 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
     onClose();
   };
 
-  const handleTagsInputChange = (e) => {
-    const tags = e.target.value.split(",").map((tag) => tag.trim());
-    setUpdatedTags(tags);
+  const handleColorChange = (tagIndex, event, tagName) => {
+    const updatedTagsCopy = [...updatedTags];
+    if (!updatedTagsCopy[tagIndex]) {
+      updatedTagsCopy[tagIndex] = {};
+    }
+    updatedTagsCopy[tagIndex].color = event.target.value;
+    updatedTagsCopy[tagIndex].name = tagName;
+    setUpdatedTags(updatedTagsCopy);
   };
 
   return (
@@ -217,12 +221,6 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
         onChange={(e) => setUpdatedTitle(e.target.value)}
         placeholder="Update Your Card Title"
       />
-      <Input
-        value={updatedTags}
-        style={{ marginBottom: 10 }}
-        onChange={handleTagsInputChange}
-        placeholder="Update Your Tags Separated By Commas"
-      />
       {tagsFromAllItems.map((tag, index) => {
         return (
           <div
@@ -237,7 +235,16 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
               </div>
               <div className="tag-color">
                 <b>Color:</b>
-                {tag.color}
+                <select
+                  value={updatedTags[index]?.color || ""}
+                  onChange={(e) => handleColorChange(index, e, tag.name)}
+                >
+                  <option value="">Select a color</option>
+                  <option value="red">Red</option>
+                  <option value="blue">Blue</option>
+                  <option value="green">Green</option>
+                  {/* Add more color options as needed */}
+                </select>
               </div>
             </div>
           </div>
@@ -245,7 +252,7 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
       })}
     </Modal>
   );
-}
+};
 
 function Trello() {
   const [columns, setColumns] = useState(columnsFromBackend);
