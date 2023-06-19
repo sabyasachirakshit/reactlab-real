@@ -9,32 +9,32 @@ const requestedItemsFromBackend = [
     id: uuid(),
     content: "Make Trello board UI",
     tags: [
-      { name: "React JS", color: "#FFCDD2" },
-      { name: "pointers", color: "#BBDEFB" },
+      { name: "React JS", color: "red" },
+      { name: "pointers", color: "blue" },
     ],
   },
   {
     id: uuid(),
     content: "Use React-Beautiful-DND package",
     tags: [
-      { name: "React JS", color: "#FFCDD2" },
-      { name: "pointers", color: "#BBDEFB" },
+      { name: "React JS", color: "red" },
+      { name: "pointers", color: "blue" },
     ],
   },
   {
     id: uuid(),
     content: "Make Multiple Lanes",
     tags: [
-      { name: "React JS", color: "#FFCDD2" },
-      { name: "pointers", color: "#BBDEFB" },
+      { name: "React JS", color: "red" },
+      { name: "pointers", color: "blue" },
     ],
   },
   {
     id: uuid(),
     content: "Write logic for Draggable",
     tags: [
-      { name: "React JS", color: "#FFCDD2" },
-      { name: "pointers", color: "#BBDEFB" },
+      { name: "React JS", color: "red" },
+      { name: "pointers", color: "blue" },
     ],
   },
 ];
@@ -44,21 +44,21 @@ const requestedItemsFromBackend2 = [
     id: uuid(),
     content: "Clean House",
     tags: [
-      { name: "Cleaning", color: "#FFCDD2" },
-      { name: "Hobby", color: "#BBDEFB" },
+      { name: "Cleaning", color: "red" },
+      { name: "Hobby", color: "blue" },
     ],
   },
   {
     id: uuid(),
     content: "Buy Groceries",
-    tags: [{ name: "Shopping", color: "#FFCDD2" }],
+    tags: [{ name: "Shopping", color: "red" }],
   },
   {
     id: uuid(),
     content: "Cook Food",
     tags: [
-      { name: "Cooking", color: "#FFCDD2" },
-      { name: "Hobby", color: "#BBDEFB" },
+      { name: "Cooking", color: "red" },
+      { name: "Hobby", color: "blue" },
     ],
   },
 ];
@@ -68,26 +68,26 @@ const requestedItemsFromBackend3 = [
     id: uuid(),
     content: "Go for Morning Walk",
     tags: [
-      { name: "Health", color: "#FFCDD2" },
-      { name: "Workout", color: "#BBDEFB" },
+      { name: "Health", color: "red" },
+      { name: "Workout", color: "blue" },
     ],
   },
   {
     id: uuid(),
     content: "Organize Accessories",
     tags: [
-      { name: "Personal", color: "#FFCDD2" },
-      { name: "Home", color: "#BBDEFB" },
-      { name: "Cleanliness", color: "#C8E6C9" },
+      { name: "Personal", color: "red" },
+      { name: "Home", color: "blue" },
+      { name: "Cleanliness", color: "green" },
     ],
   },
   {
     id: uuid(),
     content: "Read Books",
     tags: [
-      { name: "Hobby", color: "#FFCDD2" },
-      { name: "Reading", color: "#BBDEFB" },
-      { name: "Entertainment", color: "#C8E6C9" },
+      { name: "Hobby", color: "red" },
+      { name: "Reading", color: "blue" },
+      { name: "Entertainment", color: "green" },
     ],
   },
 ];
@@ -97,14 +97,14 @@ const requestedItemsFromBackend4 = [
     id: uuid(),
     content: "Watch Football Match",
     tags: [
-      { name: "Game", color: "#FFCDD2" },
-      { name: "Entertainment", color: "#BBDEFB" },
+      { name: "Game", color: "red" },
+      { name: "Entertainment", color: "blue" },
     ],
   },
   {
     id: uuid(),
     content: "Hang out with Friends",
-    tags: [{ name: "Entertainment", color: "#FFCDD2" }],
+    tags: [{ name: "Entertainment", color: "red" }],
   },
 ];
 
