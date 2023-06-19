@@ -188,6 +188,18 @@ const CardDetailModal = ({ cardId, onClose, onUpdateTitle, onUpdateTags }) => {
   const [updatedTitle, setUpdatedTitle] = useState("");
   const [updatedTags, setUpdatedTags] = useState([]);
 
+  const handleAddTag = () => {
+    const tagName = window.prompt("Enter the tag name:");
+    const tagColor = window.prompt("Enter the tag color:");
+
+    if (tagName && tagColor) {
+      const updatedTagsCopy = [...tagsFromAllItems];
+      updatedTagsCopy.push({ name: tagName, color: tagColor });
+      console.log(updatedTagsCopy);
+      setUpdatedTags(updatedTagsCopy);
+    }
+  };
+
   const handleUpdateCardModalDetails = () => {
     if (updatedTitle && updatedTitle !== "") {
       onUpdateTitle(cardId, updatedTitle);
@@ -250,6 +262,9 @@ const CardDetailModal = ({ cardId, onClose, onUpdateTitle, onUpdateTags }) => {
           </div>
         );
       })}
+      <Button type="primary" onClick={handleAddTag}>
+        Add more tags
+      </Button>
     </Modal>
   );
 };
