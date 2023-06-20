@@ -183,7 +183,7 @@ const CardDetailModal = ({ cardId, onClose, onUpdateTitle, onUpdateTags }) => {
     ...requestedItemsFromBackend4,
   ];
 
-  const tagsFromAllItems = findTagsForCardId(cardId, allItems);
+  const allTagsFromCard = findTagsForCardId(cardId, allItems);
 
   const [updatedTitle, setUpdatedTitle] = useState("");
   const [updatedTags, setUpdatedTags] = useState([]);
@@ -193,7 +193,7 @@ const CardDetailModal = ({ cardId, onClose, onUpdateTitle, onUpdateTags }) => {
     const tagColor = window.prompt("Enter the tag color:");
 
     if (tagName && tagColor) {
-      const updatedTagsCopy = [...tagsFromAllItems];
+      const updatedTagsCopy = [...allTagsFromCard];
       updatedTagsCopy.push({ name: tagName, color: tagColor });
       console.log(updatedTagsCopy);
       setUpdatedTags(updatedTagsCopy);
@@ -209,14 +209,13 @@ const CardDetailModal = ({ cardId, onClose, onUpdateTitle, onUpdateTags }) => {
     }
     onClose();
   };
+  const handleColorChange = (tagIndex, event, tagName, allTagsFromCard) => {
+    const updatedTagsCopy = allTagsFromCard.map((tag) => ({ ...tag }));
 
-  const handleColorChange = (tagIndex, event, tagName) => {
-    const updatedTagsCopy = [...updatedTags];
-    if (!updatedTagsCopy[tagIndex]) {
-      updatedTagsCopy[tagIndex] = {};
+    if (updatedTagsCopy[tagIndex]) {
+      updatedTagsCopy[tagIndex].color = event.target.value;
     }
-    updatedTagsCopy[tagIndex].color = event.target.value;
-    updatedTagsCopy[tagIndex].name = tagName;
+
     setUpdatedTags(updatedTagsCopy);
   };
 
@@ -233,7 +232,7 @@ const CardDetailModal = ({ cardId, onClose, onUpdateTitle, onUpdateTags }) => {
         onChange={(e) => setUpdatedTitle(e.target.value)}
         placeholder="Update Your Card Title"
       />
-      {tagsFromAllItems.map((tag, index) => {
+      {allTagsFromCard.map((tag, index) => {
         return (
           <div
             className="all-tags"
@@ -249,9 +248,11 @@ const CardDetailModal = ({ cardId, onClose, onUpdateTitle, onUpdateTags }) => {
                 <b>Color:</b>
                 <select
                   value={updatedTags[index]?.color || ""}
-                  onChange={(e) => handleColorChange(index, e, tag.name)}
+                  onChange={(e) =>
+                    handleColorChange(index, e, tag.name, allTagsFromCard)
+                  }
                 >
-                  <option value="">Select a color</option>
+                  <option value="">select a color</option>
                   <option value="red">Red</option>
                   <option value="blue">Blue</option>
                   <option value="green">Green</option>
