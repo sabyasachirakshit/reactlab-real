@@ -209,7 +209,7 @@ const CardDetailModal = ({ cardId, onClose, onUpdateTitle, onUpdateTags }) => {
     }
     onClose();
   };
-  const handleColorChange = (tagIndex, event, tagName, allTagsFromCard) => {
+  const handleColorChange = (tagIndex, event, allTagsFromCard) => {
     const updatedTagsCopy = allTagsFromCard.map((tag) => ({ ...tag }));
 
     if (updatedTagsCopy[tagIndex]) {
@@ -248,9 +248,7 @@ const CardDetailModal = ({ cardId, onClose, onUpdateTitle, onUpdateTags }) => {
                 <b>Color:</b>
                 <select
                   value={updatedTags[index]?.color || ""}
-                  onChange={(e) =>
-                    handleColorChange(index, e, tag.name, allTagsFromCard)
-                  }
+                  onChange={(e) => handleColorChange(index, e, allTagsFromCard)}
                 >
                   <option value="">select a color</option>
                   <option value="red">Red</option>

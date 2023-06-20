@@ -1,0 +1,16 @@
+API's for Trello:
+
+
+1.Fetching all lanes and their respective cards 
+along with their tags in the Trello Board:  /api/lanes [METHOD:GET] parameters taken -> group by status = true, group by tags=true
+2. Deleting card - > /api/lane_id/card_id [METHOD:DELETE]
+
+
+
+
+
+
+
+
+2. Adding New Lane to the group of lanes: /api/lane_id [METHOD:PUT]
+2. adding a card on a column(it has col id): [METHOD:POST]
