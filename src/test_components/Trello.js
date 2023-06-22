@@ -1,5 +1,5 @@
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { v4 as uuid } from "uuid";
 import { Modal, Input, Dropdown, Menu, Button, Tag, Popconfirm } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
@@ -132,10 +132,10 @@ const onDragEnd = (result, columns, setColumns) => {
 };
 
 function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
-  console.log("Step 3");
   const [updatedTitle, setUpdatedTitle] = useState("");
   const [updatedTags, setUpdatedTags] = useState([]);
   const [isLabelsModalVisible, setIsLabelsModalVisible] = useState(false);
+
   const colorArray = ["red", "blue", "green"];
 
   const handleUpdateCardModalDetails = () => {
@@ -163,6 +163,10 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
   };
 
   const [checkedColors, setCheckedColors] = useState([]);
+  const [displayCheckedColors, setDisplayCheckedColors] = useState([]);
+  useEffect(() => {
+    setDisplayCheckedColors(checkedColors);
+  }, [checkedColors]);
 
   return (
     <>
@@ -184,6 +188,23 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
           onChange={handleTagsInputChange}
           placeholder="Update Your Tags Separated By Commas"
         />
+
+        <div
+          className="all-labels"
+          style={{ display: "flex", gap: "5px", marginBottom: 5 }}
+        >
+          {displayCheckedColors.length &&
+            displayCheckedColors.map((item, index) => {
+              return (
+                <div
+                  className="label"
+                  style={{ backgroundColor: item, width: "10%", height: 6 }}
+                  key={index}
+                ></div>
+              );
+            })}
+        </div>
+
         <Button type="primary" onClick={handleLabelsModalOpen}>
           Labels
         </Button>
@@ -215,8 +236,10 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
                 setCheckedColors(
                   checkedColors.filter((color) => color !== item)
                 );
+                console.log("checked Color array becomes:", checkedColors);
               } else {
                 setCheckedColors([...checkedColors, item]);
+                console.log("checked Color array becomes:", checkedColors);
               }
             };
             return (
@@ -250,7 +273,9 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
             );
           })}
         </div>
-        <button style={{ width: "100%" }}>Create New Label</button>
+        <button style={{ width: "100%", cursor: "pointer" }}>
+          Create New Label
+        </button>
       </Modal>
     </>
   );
