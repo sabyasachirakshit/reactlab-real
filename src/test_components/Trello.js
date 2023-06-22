@@ -136,6 +136,7 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
   const [updatedTitle, setUpdatedTitle] = useState("");
   const [updatedTags, setUpdatedTags] = useState([]);
   const [isLabelsModalVisible, setIsLabelsModalVisible] = useState(false);
+  const colorArray = ["red", "blue", "green"];
 
   const handleUpdateCardModalDetails = () => {
     console.log("Step 5");
@@ -186,12 +187,52 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
         </Button>
       </Modal>
       <Modal
-        title="Labels"
+        title={<h3 style={{ textAlign: "center" }}>Labels</h3>}
+        style={{ width: 300 }}
         visible={isLabelsModalVisible}
         onCancel={handleLabelsModalClose}
         footer={null}
       >
-        <p>Here goes the content of the Labels modal.</p>
+        <div style={{ borderTop: "1px solid #ccc", margin: "10px 0" }} />
+        <p>Labels</p>
+        <div
+          className="all-colors"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+            gap: "10px",
+          }}
+        >
+          {colorArray.map((item, index) => {
+            return (
+              <div
+                className="color-div"
+                key={index}
+                style={{ display: "flex", width: "100%", gap: "10px" }}
+              >
+                <input
+                  type="checkbox"
+                  style={{
+                    marginRight: "10px",
+                    cursor: "pointer",
+                    borderRadius: "2px",
+                  }}
+                />
+                <div
+                  style={{
+                    backgroundColor: item,
+                    width: "100%",
+                    borderRadius: "3px",
+                    cursor: "pointer",
+                    height: "32px",
+                    marginRight: "10px",
+                  }}
+                ></div>
+              </div>
+            );
+          })}
+        </div>
       </Modal>
     </>
   );

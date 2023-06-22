@@ -1,4 +1,4 @@
-  .card:hover {
+  /* .card:hover {
     background-color: #f0f0f0 !important;
     cursor: pointer;
   }
@@ -22,5 +22,9 @@
     100% {
       opacity: 1;
     }
-  }
+  } */
   
+
+  .ant-modal css-dev-only-do-not-override-k7429z{
+    width: 330px !important;
+  }
