@@ -162,6 +162,8 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
     setIsLabelsModalVisible(false);
   };
 
+  const [checkedColors, setCheckedColors] = useState([]);
+
   return (
     <>
       <Modal
@@ -201,10 +203,22 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
             display: "flex",
             alignItems: "center",
             flexDirection: "column",
-            gap: "10px",
+            marginBottom: 10,
+            gap: 10,
           }}
         >
           {colorArray.map((item, index) => {
+            const isChecked = checkedColors.includes(item);
+
+            const handleColorClick = () => {
+              if (isChecked) {
+                setCheckedColors(
+                  checkedColors.filter((color) => color !== item)
+                );
+              } else {
+                setCheckedColors([...checkedColors, item]);
+              }
+            };
             return (
               <div
                 className="color-div"
@@ -218,8 +232,11 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
                     cursor: "pointer",
                     borderRadius: "2px",
                   }}
+                  checked={isChecked}
+                  onChange={() => {}}
                 />
                 <div
+                  onClick={handleColorClick}
                   style={{
                     backgroundColor: item,
                     width: "100%",
@@ -233,6 +250,7 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
             );
           })}
         </div>
+        <button style={{ width: "100%" }}>Create New Label</button>
       </Modal>
     </>
   );
