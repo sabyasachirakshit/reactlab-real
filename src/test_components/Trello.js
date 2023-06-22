@@ -1,9 +1,8 @@
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
-import { Modal, Input, Dropdown, Menu, Button } from "antd";
-
-import "./Trello.css";
+import { Modal, Input, Dropdown, Menu, Button, Tag, Popconfirm } from "antd";
+import { MoreOutlined } from "@ant-design/icons";
 
 const requestedItemsFromBackend = [
   {
@@ -133,10 +132,13 @@ const onDragEnd = (result, columns, setColumns) => {
 };
 
 function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
+  console.log("Step 3");
   const [updatedTitle, setUpdatedTitle] = useState("");
   const [updatedTags, setUpdatedTags] = useState([]);
+  const [isLabelsModalVisible, setIsLabelsModalVisible] = useState(false);
 
   const handleUpdateCardModalDetails = () => {
+    console.log("Step 5");
     if (updatedTitle && updatedTitle !== "") {
       onUpdateTitle(cardId, updatedTitle);
     }
@@ -151,26 +153,47 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
     setUpdatedTags(tags);
   };
 
+  const handleLabelsModalOpen = () => {
+    setIsLabelsModalVisible(true);
+  };
+
+  const handleLabelsModalClose = () => {
+    setIsLabelsModalVisible(false);
+  };
+
   return (
-    <Modal
-      title="Update Card Details"
-      open={true}
-      onCancel={onClose}
-      onOk={handleUpdateCardModalDetails}
-    >
-      <Input
-        value={updatedTitle}
-        style={{ marginBottom: 10 }}
-        onChange={(e) => setUpdatedTitle(e.target.value)}
-        placeholder="Update Your Card Title"
-      />
-      <Input
-        value={updatedTags}
-        style={{ marginBottom: 10 }}
-        onChange={handleTagsInputChange}
-        placeholder="Update Your Tags Separated By Commas"
-      />
-    </Modal>
+    <>
+      <Modal
+        title="Update Card Details"
+        open={true}
+        onCancel={onClose}
+        onOk={handleUpdateCardModalDetails}
+      >
+        <Input
+          value={updatedTitle}
+          style={{ marginBottom: 10 }}
+          onChange={(e) => setUpdatedTitle(e.target.value)}
+          placeholder="Update Your Card Title"
+        />
+        <Input
+          value={updatedTags}
+          style={{ marginBottom: 10 }}
+          onChange={handleTagsInputChange}
+          placeholder="Update Your Tags Separated By Commas"
+        />
+        <Button type="primary" onClick={handleLabelsModalOpen}>
+          Labels
+        </Button>
+      </Modal>
+      <Modal
+        title="Labels"
+        visible={isLabelsModalVisible}
+        onCancel={handleLabelsModalClose}
+        footer={null}
+      >
+        <p>Here goes the content of the Labels modal.</p>
+      </Modal>
+    </>
   );
 }
 
@@ -232,35 +255,28 @@ function Trello() {
     </Menu>
   );
 
-  const handleCardClick = (cardId) => {
-    setSelectedCardId(cardId);
-    setIsModalOpen(true);
-  };
-
   const handleDeleteCard = (columnId, cardId) => {
     const column = columns[columnId];
-    const card = column.items.find((item) => item.id === cardId);
+    const updatedColumns = { ...columns };
+    const updatedItems = column.items.filter((item) => item.id !== cardId);
+    column.items = updatedItems;
+    setColumns(updatedColumns);
+  };
 
-    Modal.confirm({
-      title: "Delete Card",
-      content: (
-        <p>
-          Are you sure you want to delete the card{" "}
-          <strong>"{card.content}"</strong>?
-        </p>
-      ),
-      okText: "Delete",
-      cancelText: "Cancel",
-      onOk: () => {
-        const updatedColumns = { ...columns };
-        const updatedItems = column.items.filter((item) => item.id !== cardId);
-        column.items = updatedItems;
-        setColumns(updatedColumns);
-      },
-    });
+  const handleMoreMenuClick = (menuClickEvent, cardId, columnId) => {
+    console.log("Step 1");
+    const { key } = menuClickEvent;
+    if (key === "edit") {
+      console.log("step 2");
+      setSelectedCardId(columnId);
+      setIsModalOpen(true);
+    } else if (key === "delete") {
+      console.log(cardId);
+    }
   };
 
   const handleUpdateTags = (cardId, updatedTags) => {
+    console.log("Step 4");
     const updatedColumns = { ...columns };
 
     for (const columnId in updatedColumns) {
@@ -276,6 +292,7 @@ function Trello() {
   };
 
   const handleUpdateTitle = (cardId, updatedTitle) => {
+    console.log("Step 6");
     const updatedColumns = { ...columns };
 
     for (const columnId in updatedColumns) {
@@ -368,12 +385,23 @@ function Trello() {
         gap: 12,
       }}
     >
-      <button style={{ width: "13%" }} onClick={handleCreateLane}>
-        Add New Lane
-      </button>
-      <Dropdown overlay={menu}>
-        <Button style={{ width: "13%" }}>{dropdownButtonText}</Button>
-      </Dropdown>
+      <div
+        className="corner-menu"
+        style={{
+          gap: 20,
+          width: "100%",
+          display: "flex",
+          justifyContent: "end",
+        }}
+      >
+        <button style={{ width: "13%" }} onClick={handleCreateLane}>
+          Add New Lane
+        </button>
+        <Dropdown overlay={menu}>
+          <Button style={{ width: "13%" }}>{dropdownButtonText}</Button>
+        </Dropdown>
+      </div>
+
       <div
         style={{
           display: "flex",
@@ -471,7 +499,7 @@ function Trello() {
                                         color: "black",
                                         ...provided.draggableProps.style,
                                       }}
-                                      onClick={() => handleCardClick(item.id)}
+                                      // onClick={() => handleCardClick(item.id)}
                                     >
                                       <div
                                         className="button-area"
@@ -481,22 +509,51 @@ function Trello() {
                                           justifyContent: "flex-end",
                                         }}
                                       >
-                                        <button
-                                          style={{
-                                            fontSize: "0.8rem",
-                                            cursor: "pointer",
-                                            border: "none",
-                                            background: "none",
-                                          }}
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleDeleteCard(id, item.id);
-                                          }}
+                                        <Dropdown
+                                          overlay={
+                                            <Menu
+                                              onClick={(e) =>
+                                                handleMoreMenuClick(
+                                                  e,
+                                                  id,
+                                                  item.id
+                                                )
+                                              }
+                                            >
+                                              <Menu.Item key="edit">
+                                                Edit Card
+                                              </Menu.Item>
+                                              <Menu.Item key="delete">
+                                                <Popconfirm
+                                                  title="Are you sure you want to delete this card?"
+                                                  onConfirm={(e) => {
+                                                    e.stopPropagation();
+                                                    handleDeleteCard(
+                                                      id,
+                                                      item.id
+                                                    );
+                                                  }}
+                                                  okText="Yes"
+                                                  cancelText="No"
+                                                >
+                                                  Delete Card
+                                                </Popconfirm>
+                                              </Menu.Item>
+                                            </Menu>
+                                          }
+                                          trigger={["click"]}
                                         >
-                                          <span style={{ color: "black" }}>
-                                            x
-                                          </span>
-                                        </button>
+                                          <MoreOutlined />
+                                        </Dropdown>
+                                      </div>
+
+                                      <div
+                                        style={{
+                                          cursor: "pointer",
+                                          marginBottom: 18,
+                                        }}
+                                      >
+                                        <b>{item.content}</b>
                                       </div>
                                       <div
                                         style={{
@@ -508,16 +565,17 @@ function Trello() {
                                       >
                                         {item.tags &&
                                           item.tags.map((tag, tagIndex) => (
-                                            <div
+                                            <Tag
                                               key={tag}
+                                              color={
+                                                colorArray[
+                                                  tagIndex % colorArray.length
+                                                ]
+                                              }
                                               style={{
-                                                backgroundColor:
-                                                  colorArray[
-                                                    tagIndex % colorArray.length
-                                                  ],
-                                                color: "black",
                                                 padding: 10,
                                                 cursor: "pointer",
+                                                color: "black",
                                                 width:
                                                   tag.length < 5
                                                     ? "32%"
@@ -527,12 +585,9 @@ function Trello() {
                                               }}
                                             >
                                               {tag}
-                                            </div>
+                                            </Tag>
                                           ))}
                                       </div>
-                                      <span style={{ cursor: "pointer" }}>
-                                        <b>{item.content}</b>
-                                      </span>
                                     </div>
                                   );
                                 }}
