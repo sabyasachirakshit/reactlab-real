@@ -163,10 +163,18 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
   };
 
   const [checkedColors, setCheckedColors] = useState([]);
-  const [displayCheckedColors, setDisplayCheckedColors] = useState([]);
+  const [colorLabels, setColorLabels] = useState({});
+  const [displayColorLabels, setDisplayColorLabels] = useState({});
+
+  const handleColorLabelChange = (color, label) => {
+    setColorLabels((prevLabels) => ({
+      ...prevLabels,
+      [color]: label,
+    }));
+  };
   useEffect(() => {
-    setDisplayCheckedColors(checkedColors);
-  }, [checkedColors]);
+    setDisplayColorLabels(colorLabels);
+  }, [colorLabels]);
 
   return (
     <>
@@ -193,16 +201,19 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
           className="all-labels"
           style={{ display: "flex", gap: "5px", marginBottom: 5 }}
         >
-          {displayCheckedColors.length &&
-            displayCheckedColors.map((item, index) => {
-              return (
-                <div
-                  className="label"
-                  style={{ backgroundColor: item, width: "10%", height: 6 }}
-                  key={index}
-                ></div>
-              );
-            })}
+          {Object.entries(displayColorLabels).map(([color, label]) => (
+            <div key={color} style={{ display: "flex", gap: "10px" }}>
+              <div
+                style={{
+                  backgroundColor: color,
+                  width: "32px",
+                  height: "32px",
+                  borderRadius: "3px",
+                }}
+              />
+              <div>{label}</div>
+            </div>
+          ))}
         </div>
 
         <Button type="primary" onClick={handleLabelsModalOpen}>
@@ -230,16 +241,20 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
         >
           {colorArray.map((item, index) => {
             const isChecked = checkedColors.includes(item);
+            const label = colorLabels[item] || "";
+
+            const handleLabelChange = (e) => {
+              const newLabel = e.target.value;
+              handleColorLabelChange(item, newLabel);
+            };
 
             const handleColorClick = () => {
               if (isChecked) {
                 setCheckedColors(
                   checkedColors.filter((color) => color !== item)
                 );
-                console.log("checked Color array becomes:", checkedColors);
               } else {
                 setCheckedColors([...checkedColors, item]);
-                console.log("checked Color array becomes:", checkedColors);
               }
             };
             return (
@@ -262,13 +277,20 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
                   onClick={handleColorClick}
                   style={{
                     backgroundColor: item,
-                    width: "100%",
+                    width: "50%",
                     borderRadius: "3px",
                     cursor: "pointer",
                     height: "32px",
                     marginRight: "10px",
                   }}
                 ></div>
+                <input
+                  type="text"
+                  value={label}
+                  onChange={handleLabelChange}
+                  style={{ marginBottom: 10 }}
+                  placeholder="Enter label"
+                />
               </div>
             );
           })}
