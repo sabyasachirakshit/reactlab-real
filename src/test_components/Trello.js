@@ -202,16 +202,17 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
           style={{ display: "flex", gap: "5px", marginBottom: 5 }}
         >
           {Object.entries(displayColorLabels).map(([color, label]) => (
-            <div key={color} style={{ display: "flex", gap: "10px" }}>
-              <div
-                style={{
-                  backgroundColor: color,
-                  width: "32px",
-                  height: "32px",
-                  borderRadius: "3px",
-                }}
-              />
-              <div>{label}</div>
+            <div
+              style={{
+                backgroundColor: color,
+                width: "44px",
+                height: "26px",
+                color: "#fff",
+                textAlign: "center",
+                borderRadius: "3px",
+              }}
+            >
+              {label}
             </div>
           ))}
         </div>
