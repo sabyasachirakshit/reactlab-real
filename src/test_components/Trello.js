@@ -198,6 +198,34 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
       ...prevLabels,
       [color]: label,
     }));
+
+    // Update the mock data
+    const updatedColumns = { ...columnsFromBackend };
+    let isNewTag = true; // Flag to check if the tag is new
+
+    Object.values(updatedColumns).forEach((column) => {
+      column.items.forEach((card) => {
+        if (card.id === cardId) {
+          const updatedTags = card.tags.map((tag) => {
+            if (tag.color === color) {
+              isNewTag = false; // Tag already exists
+              return { ...tag, name: label };
+            }
+            return tag;
+          });
+
+          // Append new tag if it doesn't exist
+          if (isNewTag && label !== "") {
+            updatedTags.push({ name: label, color });
+          }
+
+          card.tags = updatedTags;
+        }
+      });
+    });
+
+    // Update the state or send the updated data to the backend
+    // You can use the updatedColumns object here
   };
 
   useEffect(() => {
