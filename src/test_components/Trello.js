@@ -4,28 +4,6 @@ import { v4 as uuid } from "uuid";
 import { Modal, Input, Dropdown, Menu, Button, Tag, Popconfirm } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 
-const requestedItemsFromBackend = [
-  {
-    id: uuid(),
-    content: "Make Trello board UI",
-    tags: ["React JS", "Pointers"],
-  },
-  {
-    id: uuid(),
-    content: "Use React-Beautiful-DND package",
-    tags: ["React JS", "Pointers"],
-  },
-  {
-    id: uuid(),
-    content: "Make Multiple Lanes",
-    tags: ["React JS", "Pointers"],
-  },
-  {
-    id: uuid(),
-    content: "Write logic for Draggable",
-    tags: ["React JS", "Pointers"],
-  },
-];
 const colorArray = [
   "#FFCDD2",
   "#BBDEFB",
@@ -35,27 +13,92 @@ const colorArray = [
   "#00FFFF",
 ];
 
+const requestedItemsFromBackend = [
+  {
+    id: uuid(),
+    content: "Make Trello board UI",
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "Pointers", color: "#BBDEFB" },
+    ],
+  },
+  {
+    id: uuid(),
+    content: "Use React-Beautiful-DND package",
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "Pointers", color: "#BBDEFB" },
+    ],
+  },
+  {
+    id: uuid(),
+    content: "Make Multiple Lanes",
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "Pointers", color: "#BBDEFB" },
+    ],
+  },
+  {
+    id: uuid(),
+    content: "Write logic for Draggable",
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "Pointers", color: "#BBDEFB" },
+    ],
+  },
+];
+
 const requestedItemsFromBackend2 = [
-  { id: uuid(), content: "Clean House", tags: ["Cleaning", "Hobby"] },
+  {
+    id: uuid(),
+    content: "Clean House",
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "Pointers", color: "#BBDEFB" },
+    ],
+  },
   {
     id: uuid(),
     content: "Buy Groceries",
-    tags: ["Shopping"],
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "Pointers", color: "#BBDEFB" },
+    ],
   },
-  { id: uuid(), content: "Cook Food", tags: ["Hobby", "Cooking"] },
+  {
+    id: uuid(),
+    content: "Cook Food",
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "Pointers", color: "#BBDEFB" },
+    ],
+  },
 ];
 
 const requestedItemsFromBackend3 = [
-  { id: uuid(), content: "Go for Morning Walk", tags: ["Health", "Workout"] },
+  {
+    id: uuid(),
+    content: "Go for Morning Walk",
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "Pointers", color: "#BBDEFB" },
+    ],
+  },
   {
     id: uuid(),
     content: "Organize Accessories",
-    tags: ["Personal", "Home", "Cleanliness"],
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "Pointers", color: "#BBDEFB" },
+    ],
   },
   {
     id: uuid(),
     content: "Read Books",
-    tags: ["Hobby", "Reading", "Entertainment"],
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "Pointers", color: "#BBDEFB" },
+    ],
   },
 ];
 
@@ -63,12 +106,18 @@ const requestedItemsFromBackend4 = [
   {
     id: uuid(),
     content: "Watch Football Match",
-    tags: ["Game", "Entertainment"],
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "Pointers", color: "#BBDEFB" },
+    ],
   },
   {
     id: uuid(),
     content: "Hang out with Friends",
-    tags: ["Entertainment"],
+    tags: [
+      { name: "React JS", color: "#FFCDD2" },
+      { name: "Pointers", color: "#BBDEFB" },
+    ],
   },
 ];
 
@@ -164,6 +213,7 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
     }));
   };
   useEffect(() => {
+    console.log("This is colorLabels:", colorLabels);
     setDisplayColorLabels(colorLabels);
   }, [colorLabels]);
 
@@ -658,12 +708,8 @@ function Trello() {
                                         {item.tags &&
                                           item.tags.map((tag, tagIndex) => (
                                             <Tag
-                                              key={tag}
-                                              color={
-                                                colorArray[
-                                                  tagIndex % colorArray.length
-                                                ]
-                                              }
+                                              key={tagIndex}
+                                              color={tag.color}
                                               style={{
                                                 padding: 10,
                                                 cursor: "pointer",
@@ -676,7 +722,7 @@ function Trello() {
                                                 borderRadius: 20,
                                               }}
                                             >
-                                              {tag}
+                                              {tag.name}
                                             </Tag>
                                           ))}
                                       </div>
