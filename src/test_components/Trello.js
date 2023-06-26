@@ -447,15 +447,15 @@ function Trello() {
 
         for (const item of column.items) {
           for (const tag of item.tags) {
-            if (!allTags.includes(tag)) {
-              allTags.push(tag);
+            if (!allTags.includes(tag.name)) {
+              allTags.push(tag.name);
             }
 
-            if (!cardsByTag[tag]) {
-              cardsByTag[tag] = [];
+            if (!cardsByTag[tag.name]) {
+              cardsByTag[tag.name] = [];
             }
 
-            cardsByTag[tag].push(item);
+            cardsByTag[tag.name].push(item);
           }
         }
       }
