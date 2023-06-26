@@ -4,15 +4,6 @@ import { v4 as uuid } from "uuid";
 import { Modal, Input, Dropdown, Menu, Button, Tag, Popconfirm } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 
-const colorArray = [
-  "#FFCDD2",
-  "#BBDEFB",
-  "#C8E6C9",
-  "#E1BEE7",
-  "#FF00FF",
-  "#00FFFF",
-];
-
 const requestedItemsFromBackend = [
   {
     id: uuid(),
@@ -180,14 +171,13 @@ const onDragEnd = (result, columns, setColumns) => {
   }
 };
 
-function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
+function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
   const [updatedTitle, setUpdatedTitle] = useState("");
   const [isLabelsModalVisible, setIsLabelsModalVisible] = useState(false);
 
   const colorArray = ["red", "blue", "green"];
 
   const handleUpdateCardModalDetails = () => {
-    console.log("Step 5");
     if (updatedTitle && updatedTitle !== "") {
       onUpdateTitle(cardId, updatedTitle);
     }
@@ -213,6 +203,7 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
     }));
   };
   useEffect(() => {
+    console.log("The current card id that we are in is:", cardId);
     console.log("This is colorLabels:", colorLabels);
     setDisplayColorLabels(colorLabels);
   }, [colorLabels]);
@@ -406,10 +397,8 @@ function Trello() {
   };
 
   const handleMoreMenuClick = (menuClickEvent, cardId, columnId) => {
-    console.log("Step 1");
     const { key } = menuClickEvent;
     if (key === "edit") {
-      console.log("step 2");
       setSelectedCardId(columnId);
       setIsModalOpen(true);
     } else if (key === "delete") {
@@ -417,24 +406,7 @@ function Trello() {
     }
   };
 
-  const handleUpdateTags = (cardId, updatedTags) => {
-    console.log("Step 4");
-    const updatedColumns = { ...columns };
-
-    for (const columnId in updatedColumns) {
-      const column = updatedColumns[columnId];
-      const cardIndex = column.items.findIndex((card) => card.id === cardId);
-      if (cardIndex !== -1) {
-        column.items[cardIndex].tags = updatedTags;
-        break;
-      }
-    }
-
-    setColumns(updatedColumns);
-  };
-
   const handleUpdateTitle = (cardId, updatedTitle) => {
-    console.log("Step 6");
     const updatedColumns = { ...columns };
 
     for (const columnId in updatedColumns) {
@@ -748,7 +720,6 @@ function Trello() {
           cardId={selectedCardId}
           onClose={() => setIsModalOpen(false)}
           onUpdateTitle={handleUpdateTitle}
-          onUpdateTags={handleUpdateTags}
         />
       )}
     </div>
