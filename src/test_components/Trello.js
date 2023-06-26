@@ -206,16 +206,19 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
 
   useEffect(() => {
     const tags = {};
+    const colors = [];
     Object.values(columnsFromBackend).forEach((column) => {
       column.items.forEach((card) => {
         if (card.id === cardId) {
           card.tags.forEach((tag) => {
             tags[tag.color] = tag.name;
+            colors.push(tag.color);
           });
         }
       });
     });
     setDisplayTags(tags);
+    setCheckedColors(colors);
   }, [cardId]);
 
   return (
@@ -283,6 +286,7 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
         >
           {colorArray.map((item, index) => {
             const isChecked = checkedColors.includes(item);
+            console.log("ischecked:", isChecked);
             const label = colorLabels[item] || "";
 
             const handleLabelChange = (e) => {
