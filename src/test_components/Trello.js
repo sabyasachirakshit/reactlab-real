@@ -190,11 +190,12 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
 
   const handleLabelsModalClose = () => {
     setIsLabelsModalVisible(false);
+    setCheckedColors(Object.keys(colorLabels));
   };
 
   const [checkedColors, setCheckedColors] = useState([]);
   const [colorLabels, setColorLabels] = useState({});
-  const [displayColorLabels, setDisplayColorLabels] = useState({});
+  const [displayTags, setDisplayTags] = useState({});
 
   const handleColorLabelChange = (color, label) => {
     setColorLabels((prevLabels) => ({
@@ -202,6 +203,7 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
       [color]: label,
     }));
   };
+
   useEffect(() => {
     const tags = {};
     Object.values(columnsFromBackend).forEach((column) => {
@@ -213,11 +215,12 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
         }
       });
     });
-    setDisplayColorLabels(tags);
-  }, [colorLabels]);
+    setDisplayTags(tags);
+  }, [cardId]);
 
   return (
     <>
+      {/* First Modal */}
       <Modal
         title="Update Card Details"
         open={true}
@@ -231,15 +234,17 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
           placeholder="Update Your Card Title"
         />
 
+        {/* Displaying tags */}
         <div
           className="all-labels"
           style={{ display: "flex", gap: "5px", marginBottom: 5 }}
         >
-          {Object.entries(displayColorLabels).map(([color, label]) => (
+          {Object.entries(displayTags).map(([color, label]) => (
             <div
+              key={color}
               style={{
                 backgroundColor: color,
-                width: "44px",
+                width: "70px",
                 height: "26px",
                 color: "#fff",
                 textAlign: "center",
@@ -255,6 +260,8 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
           Labels
         </Button>
       </Modal>
+
+      {/* Second Modal */}
       <Modal
         title={<h3 style={{ textAlign: "center" }}>Labels</h3>}
         style={{ width: 300 }}
@@ -292,6 +299,7 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
                 setCheckedColors([...checkedColors, item]);
               }
             };
+
             return (
               <div
                 className="color-div"
@@ -306,7 +314,7 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
                     borderRadius: "2px",
                   }}
                   checked={isChecked}
-                  onChange={() => {}}
+                  onChange={handleColorClick}
                 />
                 <div
                   onClick={handleColorClick}
@@ -321,7 +329,7 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
                 ></div>
                 <input
                   type="text"
-                  value={label}
+                  value={displayTags[item]}
                   onChange={handleLabelChange}
                   style={{ marginBottom: 10 }}
                   placeholder="Enter label"
