@@ -239,6 +239,20 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
       [color]: label,
     }));
 
+    //{this is for delete  tags altogether}
+    // setColorLabels((prevLabels) => {
+    //   const updatedLabels = { ...prevLabels };
+
+    //   // Remove the label if it is unchecked or has an empty text
+    //   if (!label || label === "") {
+    //     delete updatedLabels[color];
+    //   } else {
+    //     updatedLabels[color] = label;
+    //   }
+
+    //   return updatedLabels;
+    // });
+
     // Update the mock data
     const updatedColumns = { ...columnsFromBackend };
     let isNewTag = true; // Flag to check if the tag is new
@@ -303,21 +317,26 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
           className="all-labels"
           style={{ display: "flex", gap: "5px", marginBottom: 5 }}
         >
-          {Object.entries(colorLabels).map(([color, label]) => (
-            <div
-              key={color}
-              style={{
-                backgroundColor: color,
-                width: "70px",
-                height: "26px",
-                color: "#fff",
-                textAlign: "center",
-                borderRadius: "3px",
-              }}
-            >
-              {label}
-            </div>
-          ))}
+          {Object.entries(colorLabels).map(([color, label]) => {
+            if (label !== "") {
+              return (
+                <div
+                  key={color}
+                  style={{
+                    backgroundColor: color,
+                    width: "70px",
+                    height: "26px",
+                    color: "#fff",
+                    textAlign: "center",
+                    borderRadius: "3px",
+                  }}
+                >
+                  {label}
+                </div>
+              );
+            }
+            return null; // Skip rendering empty labels
+          })}
         </div>
 
         <Button type="primary" onClick={handleLabelsModalOpen}>
@@ -755,25 +774,27 @@ function Trello() {
                                         }}
                                       >
                                         {item.tags &&
-                                          item.tags.map((tag, tagIndex) => (
-                                            <Tag
-                                              key={tagIndex}
-                                              color={tag.color}
-                                              style={{
-                                                padding: 10,
-                                                cursor: "pointer",
-                                                color: "black",
-                                                width:
-                                                  tag.length < 5
-                                                    ? "32%"
-                                                    : "fit-content",
-                                                textAlign: "center",
-                                                borderRadius: 20,
-                                              }}
-                                            >
-                                              {tag.name}
-                                            </Tag>
-                                          ))}
+                                          item.tags
+                                            .filter((tag) => tag.name !== "") // Filter tags with non-empty names
+                                            .map((tag, tagIndex) => (
+                                              <Tag
+                                                key={tagIndex}
+                                                color={tag.color}
+                                                style={{
+                                                  padding: 10,
+                                                  cursor: "pointer",
+                                                  color: "black",
+                                                  width:
+                                                    tag.name.length < 5
+                                                      ? "32%"
+                                                      : "fit-content",
+                                                  textAlign: "center",
+                                                  borderRadius: 20,
+                                                }}
+                                              >
+                                                {tag.name}
+                                              </Tag>
+                                            ))}
                                       </div>
                                     </div>
                                   );
