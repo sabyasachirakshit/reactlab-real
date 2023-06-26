@@ -175,6 +175,7 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
   const [updatedTitle, setUpdatedTitle] = useState("");
   const [isLabelsModalVisible, setIsLabelsModalVisible] = useState(false);
   const [colorLabels, setColorLabels] = useState({});
+  const [newLabel, setNewLabel] = useState({ name: "", color: "" });
 
   const colorArray = ["red", "blue", "green"];
 
@@ -191,6 +192,40 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
 
   const handleLabelsModalClose = () => {
     setIsLabelsModalVisible(false);
+  };
+
+  const handleCreateNewLabel = () => {
+    const name = prompt("Enter the label name:");
+    const color = prompt("Enter the label color:");
+
+    // Check if the name and color are provided
+    if (name && color) {
+      // Update the new label state
+      setNewLabel({ name, color });
+
+      // Update the mock data
+      const updatedColumns = { ...columnsFromBackend };
+
+      Object.values(updatedColumns).forEach((column) => {
+        column.items.forEach((card) => {
+          if (card.id === cardId) {
+            // Check if the label already exists
+            const existingLabel = card.tags.find((tag) => tag.color === color);
+
+            if (existingLabel) {
+              // Update the existing label's name
+              existingLabel.name = name;
+            } else {
+              // Create a new label and add it to the card's tags
+              card.tags.push({ name, color });
+            }
+          }
+        });
+      });
+
+      // Update the state or send the updated data to the backend
+      // You can use the updatedColumns object here
+    }
   };
 
   const handleColorLabelChange = (color, label) => {
@@ -305,7 +340,7 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
             gap: 10,
           }}
         >
-          {colorArray.map((item, index) => {
+          {Object.keys(colorLabels).map((item, index) => {
             const label = colorLabels[item] || "";
 
             const handleLabelChange = (e) => {
@@ -356,7 +391,10 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
             );
           })}
         </div>
-        <button style={{ width: "100%", cursor: "pointer" }}>
+        <button
+          style={{ width: "100%", cursor: "pointer" }}
+          onClick={handleCreateNewLabel}
+        >
           Create New Label
         </button>
       </Modal>
