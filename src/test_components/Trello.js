@@ -9,32 +9,32 @@ const requestedItemsFromBackend = [
     id: uuid(),
     content: "Make Trello board UI",
     tags: [
-      { name: "React JS", color: "#FFCDD2" },
-      { name: "Pointers", color: "#BBDEFB" },
+      { name: "React JS", color: "red" },
+      { name: "Pointers", color: "blue" },
     ],
   },
   {
     id: uuid(),
     content: "Use React-Beautiful-DND package",
     tags: [
-      { name: "React JS", color: "#FFCDD2" },
-      { name: "Pointers", color: "#BBDEFB" },
+      { name: "React JS", color: "red" },
+      { name: "Pointers", color: "blue" },
     ],
   },
   {
     id: uuid(),
     content: "Make Multiple Lanes",
     tags: [
-      { name: "React JS", color: "#FFCDD2" },
-      { name: "Pointers", color: "#BBDEFB" },
+      { name: "React JS", color: "red" },
+      { name: "Pointers", color: "blue" },
     ],
   },
   {
     id: uuid(),
     content: "Write logic for Draggable",
     tags: [
-      { name: "React JS", color: "#FFCDD2" },
-      { name: "Pointers", color: "#BBDEFB" },
+      { name: "React JS", color: "red" },
+      { name: "Pointers", color: "blue" },
     ],
   },
 ];
@@ -44,24 +44,24 @@ const requestedItemsFromBackend2 = [
     id: uuid(),
     content: "Clean House",
     tags: [
-      { name: "React JS", color: "#FFCDD2" },
-      { name: "Pointers", color: "#BBDEFB" },
+      { name: "React JS", color: "red" },
+      { name: "Pointers", color: "blue" },
     ],
   },
   {
     id: uuid(),
     content: "Buy Groceries",
     tags: [
-      { name: "React JS", color: "#FFCDD2" },
-      { name: "Pointers", color: "#BBDEFB" },
+      { name: "React JS", color: "red" },
+      { name: "Pointers", color: "blue" },
     ],
   },
   {
     id: uuid(),
     content: "Cook Food",
     tags: [
-      { name: "React JS", color: "#FFCDD2" },
-      { name: "Pointers", color: "#BBDEFB" },
+      { name: "React JS", color: "red" },
+      { name: "Pointers", color: "blue" },
     ],
   },
 ];
@@ -71,24 +71,24 @@ const requestedItemsFromBackend3 = [
     id: uuid(),
     content: "Go for Morning Walk",
     tags: [
-      { name: "React JS", color: "#FFCDD2" },
-      { name: "Pointers", color: "#BBDEFB" },
+      { name: "React JS", color: "red" },
+      { name: "Pointers", color: "blue" },
     ],
   },
   {
     id: uuid(),
     content: "Organize Accessories",
     tags: [
-      { name: "React JS", color: "#FFCDD2" },
-      { name: "Pointers", color: "#BBDEFB" },
+      { name: "React JS", color: "red" },
+      { name: "Pointers", color: "blue" },
     ],
   },
   {
     id: uuid(),
     content: "Read Books",
     tags: [
-      { name: "React JS", color: "#FFCDD2" },
-      { name: "Pointers", color: "#BBDEFB" },
+      { name: "React JS", color: "red" },
+      { name: "Pointers", color: "blue" },
     ],
   },
 ];
@@ -98,16 +98,16 @@ const requestedItemsFromBackend4 = [
     id: uuid(),
     content: "Watch Football Match",
     tags: [
-      { name: "React JS", color: "#FFCDD2" },
-      { name: "Pointers", color: "#BBDEFB" },
+      { name: "React JS", color: "red" },
+      { name: "Pointers", color: "blue" },
     ],
   },
   {
     id: uuid(),
     content: "Hang out with Friends",
     tags: [
-      { name: "React JS", color: "#FFCDD2" },
-      { name: "Pointers", color: "#BBDEFB" },
+      { name: "React JS", color: "red" },
+      { name: "Pointers", color: "blue" },
     ],
   },
 ];
@@ -203,9 +203,17 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
     }));
   };
   useEffect(() => {
-    console.log("The current card id that we are in is:", cardId);
-    console.log("This is colorLabels:", colorLabels);
-    setDisplayColorLabels(colorLabels);
+    const tags = {};
+    Object.values(columnsFromBackend).forEach((column) => {
+      column.items.forEach((card) => {
+        if (card.id === cardId) {
+          card.tags.forEach((tag) => {
+            tags[tag.color] = tag.name;
+          });
+        }
+      });
+    });
+    setDisplayColorLabels(tags);
   }, [colorLabels]);
 
   return (
