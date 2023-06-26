@@ -133,7 +133,6 @@ const onDragEnd = (result, columns, setColumns) => {
 
 function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
   const [updatedTitle, setUpdatedTitle] = useState("");
-  const [updatedTags, setUpdatedTags] = useState([]);
   const [isLabelsModalVisible, setIsLabelsModalVisible] = useState(false);
 
   const colorArray = ["red", "blue", "green"];
@@ -143,15 +142,7 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
     if (updatedTitle && updatedTitle !== "") {
       onUpdateTitle(cardId, updatedTitle);
     }
-    if (updatedTags.length) {
-      onUpdateTags(cardId, updatedTags);
-    }
     onClose();
-  };
-
-  const handleTagsInputChange = (e) => {
-    const tags = e.target.value.split(",").map((tag) => tag.trim());
-    setUpdatedTags(tags);
   };
 
   const handleLabelsModalOpen = () => {
@@ -189,12 +180,6 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle, onUpdateTags }) {
           style={{ marginBottom: 10 }}
           onChange={(e) => setUpdatedTitle(e.target.value)}
           placeholder="Update Your Card Title"
-        />
-        <Input
-          value={updatedTags}
-          style={{ marginBottom: 10 }}
-          onChange={handleTagsInputChange}
-          placeholder="Update Your Tags Separated By Commas"
         />
 
         <div
