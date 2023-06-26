@@ -177,8 +177,6 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
   const [colorLabels, setColorLabels] = useState({});
   const [newLabel, setNewLabel] = useState({ name: "", color: "" });
 
-  const colorArray = ["red", "blue", "green"];
-
   const handleUpdateCardModalDetails = () => {
     if (updatedTitle && updatedTitle !== "") {
       onUpdateTitle(cardId, updatedTitle);
@@ -196,40 +194,28 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
   const handleCreateNewLabel = () => {
     const name = prompt("Enter the label name:");
     const color = prompt("Enter the label color:");
-
-    // Check if the name and color are provided
     if (name && color) {
-      // Update the new label state
       setNewLabel({ name, color });
-
-      // Update the colorLabels state immediately
       setColorLabels((prevLabels) => ({
         ...prevLabels,
         [color]: name,
       }));
 
-      // Update the mock data
       const updatedColumns = { ...columnsFromBackend };
 
       Object.values(updatedColumns).forEach((column) => {
         column.items.forEach((card) => {
           if (card.id === cardId) {
-            // Check if the label already exists
             const existingLabel = card.tags.find((tag) => tag.color === color);
 
             if (existingLabel) {
-              // Update the existing label's name
               existingLabel.name = name;
             } else {
-              // Create a new label and add it to the card's tags
               card.tags.push({ name, color });
             }
           }
         });
       });
-
-      // Update the state or send the updated data to the backend
-      // You can use the updatedColumns object here
     }
   };
 
@@ -255,20 +241,19 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
 
     // Update the mock data
     const updatedColumns = { ...columnsFromBackend };
-    let isNewTag = true; // Flag to check if the tag is new
+    let isNewTag = true;
 
     Object.values(updatedColumns).forEach((column) => {
       column.items.forEach((card) => {
         if (card.id === cardId) {
           const updatedTags = card.tags.map((tag) => {
             if (tag.color === color) {
-              isNewTag = false; // Tag already exists
+              isNewTag = false;
               return { ...tag, name: label };
             }
             return tag;
           });
 
-          // Append new tag if it doesn't exist
           if (isNewTag && label !== "") {
             updatedTags.push({ name: label, color });
           }
@@ -277,9 +262,6 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
         }
       });
     });
-
-    // Update the state or send the updated data to the backend
-    // You can use the updatedColumns object here
   };
 
   useEffect(() => {
@@ -298,7 +280,6 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
 
   return (
     <>
-      {/* First Modal */}
       <Modal
         title="Update Card Details"
         open={true}
@@ -312,7 +293,6 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
           placeholder="Update Your Card Title"
         />
 
-        {/* Displaying tags */}
         <div
           className="all-labels"
           style={{ display: "flex", gap: "5px", marginBottom: 5 }}
@@ -335,7 +315,7 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
                 </div>
               );
             }
-            return null; // Skip rendering empty labels
+            return null;
           })}
         </div>
 
@@ -775,7 +755,7 @@ function Trello() {
                                       >
                                         {item.tags &&
                                           item.tags
-                                            .filter((tag) => tag.name !== "") // Filter tags with non-empty names
+                                            .filter((tag) => tag.name !== "")
                                             .map((tag, tagIndex) => (
                                               <Tag
                                                 key={tagIndex}
