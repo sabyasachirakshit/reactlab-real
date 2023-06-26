@@ -193,7 +193,6 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
   const handleLabelsModalClose = () => {
     setIsLabelsModalVisible(false);
   };
-
   const handleCreateNewLabel = () => {
     const name = prompt("Enter the label name:");
     const color = prompt("Enter the label color:");
@@ -202,6 +201,12 @@ function CardDetailModal({ cardId, onClose, onUpdateTitle }) {
     if (name && color) {
       // Update the new label state
       setNewLabel({ name, color });
+
+      // Update the colorLabels state immediately
+      setColorLabels((prevLabels) => ({
+        ...prevLabels,
+        [color]: name,
+      }));
 
       // Update the mock data
       const updatedColumns = { ...columnsFromBackend };
